@@ -1,0 +1,33 @@
+{
+  "name": "meal-recommender",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:mstephenhunt/meal-recommender.git",
+  "author": "Matt Hunt <mstephenhunt@gmail.com>",
+  "license": "MIT",
+  "engine": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "lint-staged": "lint-staged",
+    "lint": "eslint \"**/*.ts\" --fix"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint \"**/*.ts\" --fix"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@typescript-eslint/parser": "^6.3.0",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "lint-staged": "^13.3.0"
+  }
+}
