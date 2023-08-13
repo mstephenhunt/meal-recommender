@@ -40,7 +40,7 @@ export class AuthService {
 
   public getJwt(userId: number): string {
     const token = this.jwtService.sign({
-      userId
+      userId,
     });
 
     return token;

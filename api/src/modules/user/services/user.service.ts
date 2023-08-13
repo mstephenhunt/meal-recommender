@@ -26,7 +26,7 @@ export class UserService {
     });
 
     if (!user) {
-      console.error('User doesn\'t exist');
+      console.error("User doesn't exist");
       throw new Error('Failed to log in user');
     }
 
@@ -62,7 +62,7 @@ export class UserService {
 
     return {
       email: input.email,
-      jwt: this.authService.getJwt(user.id)
-    }
+      jwt: this.authService.getJwt(user.id),
+    };
   }
 }
