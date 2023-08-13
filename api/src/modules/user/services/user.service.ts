@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../../db/services/prisma.service";
 import { AuthService } from "../../auth/services/auth.service";
 
 type User = {
@@ -10,7 +9,6 @@ type User = {
 @Injectable()
 export class UserService {
   constructor(
-    private readonly prisma: PrismaService,
     private readonly authService: AuthService
   ) {}
 

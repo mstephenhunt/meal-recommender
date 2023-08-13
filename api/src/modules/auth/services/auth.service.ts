@@ -1,8 +1,5 @@
-//src/auth/auth.service.ts
 import {
   Injectable,
-  NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../../db/services/prisma.service';
 import { JwtService } from '@nestjs/jwt';
