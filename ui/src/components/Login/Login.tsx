@@ -1,4 +1,4 @@
-import React/*, { useState }*/ from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -6,54 +6,48 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Login(/*{ setUser }*/) {
-  // const [username, setUsername] = useState<string | null>(null);
-  // const [password, setPassword] = useState<string | null>(null);
-  // const [loginErrors, setLoginErrors] = useState<string[]>([]);
-  // const navigate = useNavigate();
+  const [username, setUsername] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
+  const [loginErrors, setLoginErrors] = useState<string[]>([]);
+  const navigate = useNavigate();
 
-  // const handleUsernameChange = (event) => {
-  //   setUsername(event.target.value);
-  // };
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
 
-  // const handlePasswordChange = (event) => {
-  //   setPassword(event.target.value);
-  // };
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
+  const handleSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
 
-  //   const response = await fetch("/login", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ username, password }),
-  //   });
+    const baseUrl = process.env.REACT_APP_API_URL;
 
-  //   const statusCode = response.status;
-  //   const responseBody = await response.json();
+    const response = await fetch(`${baseUrl}/user/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: username, password }),
+    });
 
-  //   if (statusCode === 201) {
-  //     // If the login was successful, redirect to the user page
-  //     setUser({
-  //       id: responseBody.id,
-  //       username: responseBody.username,
-  //     });
+    const statusCode = response.status;
+    const responseBody = await response.json();
 
-  //     navigate("/blueprints");
+    if (statusCode === 201) {
+      // If the login was successful, save the JWT from the response into local storage
+      const { jwt } = responseBody;
+      localStorage.setItem("jwt", jwt);
 
-  //     return;
-  //   }
+      navigate("/home");
 
-  //   if (statusCode === 401 && responseBody.errors) {
-  //     // If there's a body and it contains errors, display that
-  //     // Otherwise, display a generic error
-  //     setLoginErrors(responseBody.errors);
-  //   } else {
-  //     setLoginErrors(["An unknown error occurred. Please try again."]);
-  //   }
-  // };
+      return;
+    }
+
+    setLoginErrors(["An unknown error occurred. Please try again."]);
+  };
 
   return (
     <Container maxWidth="xs">
@@ -79,7 +73,7 @@ export default function Login(/*{ setUser }*/) {
             </Typography>
           </Box>
         </div>
-        <Box component="form" sx={{ width: "100%" }} /*onSubmit={handleSubmit}*/>
+        <Box component="form" sx={{ width: "100%" }} onSubmit={handleSubmit}>
           <TextField
             margin="normal"
             required
@@ -88,7 +82,7 @@ export default function Login(/*{ setUser }*/) {
             label="Username"
             name="username"
             autoFocus
-            // onChange={handleUsernameChange}
+            onChange={handleUsernameChange}
           />
           <TextField
             margin="normal"
@@ -98,7 +92,7 @@ export default function Login(/*{ setUser }*/) {
             label="Password"
             type="password"
             id="password"
-            // onChange={handlePasswordChange}
+            onChange={handlePasswordChange}
           />
           <Button
             type="submit"
@@ -109,7 +103,7 @@ export default function Login(/*{ setUser }*/) {
             Log In
           </Button>
         </Box>
-        {/* {loginErrors.length > 0 && (
+        {loginErrors.length > 0 && (
           <Box sx={{ width: "100%" }}>
             {loginErrors.map((error) => (
               <Typography
@@ -121,7 +115,7 @@ export default function Login(/*{ setUser }*/) {
               </Typography>
             ))}
           </Box>
-        )} */}
+        )}
         <Link href="#" sx={{ textAlign: "right", width: "100%" }}>
           {"No account? Sign Up"}
         </Link>
