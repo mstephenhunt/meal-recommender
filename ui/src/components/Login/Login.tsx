@@ -22,38 +22,48 @@ export default function Login(/*{ setUser }*/) {
     setPassword(event.target.value);
   };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
+  const handleSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
 
-  //   const response = await fetch("/login", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ username, password }),
-  //   });
+    const baseUrl = process.env.REACT_APP_API_URL;
 
-  //   const statusCode = response.status;
-  //   const responseBody = await response.json();
+    const response = await fetch(`${baseUrl}/user/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: username, password }),
+    });
 
-  //   if (statusCode === 201) {
-  //     // If the login was successful, redirect to the user page
-  //     setUser({
-  //       id: responseBody.id,
-  //       username: responseBody.username,
-  //     });
+    console.log(await response.json());
 
-  //     navigate("/blueprints");
+    // const response = await fetch("/login", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ username, password }),
+    // });
 
-  //     return;
-  //   }
+    // const statusCode = response.status;
+    // const responseBody = await response.json();
 
-  //   if (statusCode === 401 && responseBody.errors) {
-  //     // If there's a body and it contains errors, display that
-  //     // Otherwise, display a generic error
-  //     setLoginErrors(responseBody.errors);
-  //   } else {
-  //     setLoginErrors(["An unknown error occurred. Please try again."]);
-  //   }
-  // };
+    // if (statusCode === 201) {
+    //   // If the login was successful, redirect to the user page
+    //   setUser({
+    //     id: responseBody.id,
+    //     username: responseBody.username,
+    //   });
+
+    //   navigate("/blueprints");
+
+    //   return;
+    // }
+
+    // if (statusCode === 401 && responseBody.errors) {
+    //   // If there's a body and it contains errors, display that
+    //   // Otherwise, display a generic error
+    //   setLoginErrors(responseBody.errors);
+    // } else {
+    //   setLoginErrors(["An unknown error occurred. Please try again."]);
+    // }
+  };
 
   return (
     <Container maxWidth="xs">
@@ -79,7 +89,7 @@ export default function Login(/*{ setUser }*/) {
             </Typography>
           </Box>
         </div>
-        <Box component="form" sx={{ width: "100%" }} /*onSubmit={handleSubmit}*/>
+        <Box component="form" sx={{ width: "100%" }} onSubmit={handleSubmit}>
           <TextField
             margin="normal"
             required
