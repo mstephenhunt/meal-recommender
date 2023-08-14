@@ -6,13 +6,13 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Login(/*{ setUser }*/) {
   const [username, setUsername] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
-  // const [loginErrors, setLoginErrors] = useState<string[]>([]);
-  // const navigate = useNavigate();
+  const [loginErrors, setLoginErrors] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -33,36 +33,20 @@ export default function Login(/*{ setUser }*/) {
       body: JSON.stringify({ email: username, password }),
     });
 
-    console.log(await response.json());
+    const statusCode = response.status;
+    const responseBody = await response.json();
 
-    // const response = await fetch("/login", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ username, password }),
-    // });
+    if (statusCode === 201) {
+      // If the login was successful, save the JWT from the response into local storage
+      const { jwt } = responseBody;
+      localStorage.setItem("jwt", jwt);
 
-    // const statusCode = response.status;
-    // const responseBody = await response.json();
+      navigate("/home");
 
-    // if (statusCode === 201) {
-    //   // If the login was successful, redirect to the user page
-    //   setUser({
-    //     id: responseBody.id,
-    //     username: responseBody.username,
-    //   });
+      return;
+    }
 
-    //   navigate("/blueprints");
-
-    //   return;
-    // }
-
-    // if (statusCode === 401 && responseBody.errors) {
-    //   // If there's a body and it contains errors, display that
-    //   // Otherwise, display a generic error
-    //   setLoginErrors(responseBody.errors);
-    // } else {
-    //   setLoginErrors(["An unknown error occurred. Please try again."]);
-    // }
+    setLoginErrors(["An unknown error occurred. Please try again."]);
   };
 
   return (
@@ -119,7 +103,7 @@ export default function Login(/*{ setUser }*/) {
             Log In
           </Button>
         </Box>
-        {/* {loginErrors.length > 0 && (
+        {loginErrors.length > 0 && (
           <Box sx={{ width: "100%" }}>
             {loginErrors.map((error) => (
               <Typography
@@ -131,7 +115,7 @@ export default function Login(/*{ setUser }*/) {
               </Typography>
             ))}
           </Box>
-        )} */}
+        )}
         <Link href="#" sx={{ textAlign: "right", width: "100%" }}>
           {"No account? Sign Up"}
         </Link>
