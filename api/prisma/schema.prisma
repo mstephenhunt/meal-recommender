@@ -13,7 +13,6 @@ model User {
   updatedAt       DateTime        @updatedAt                       @map("updated_at")
   email           String          @unique
   password        String
-  recipes         UserRecipe[]    @relation("user_recipes")
 
   @@map("users")
 }
@@ -22,9 +21,7 @@ model Ingredient {
   id                Int                @id                              @default(autoincrement())
   createdAt         DateTime           @default(now())                  @map("created_at")
   updatedAt         DateTime           @updatedAt                       @map("updated_at")
-  name              String             @unique 
-  recipes           Recipe[]           @relation("recipe_ingredients")
-  recipeIngredients RecipeIngredient[] @relation("recipe_ingredients")
+  name              String             @unique
 
   @@map("ingredients")
 }
@@ -34,10 +31,7 @@ model Recipe {
   createdAt         DateTime            @default(now())                  @map("created_at")
   updatedAt         DateTime            @updatedAt                       @map("updated_at")
   name              String              @unique 
-  ingredients       Ingredient[]        @relation("recipe_ingredients")
   instructions      String
-  recipeIngredients RecipeIngredient[]  @relation("recipe_ingredients")
-  userRecipes       UserRecipe[]        @relation("user_recipes")
 
   @@map("recipes")
 }
@@ -46,9 +40,7 @@ model RecipeIngredient {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())                  @map("created_at")
   updatedAt       DateTime        @updatedAt                       @map("updated_at")
-  recipe          Recipe          @relation("recipe_ingredients", fields: [recipeId], references: [id])
   recipeId        Int
-  ingredient      Ingredient      @relation("recipe_ingredients", fields: [ingredientId], references: [id])
   ingredientId    Int
   quantity        Int
   unit            String
@@ -60,9 +52,7 @@ model UserRecipe {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())                  @map("created_at")
   updatedAt       DateTime        @updatedAt                       @map("updated_at")
-  user            User            @relation("user_recipes", fields: [userId], references: [id])
   userId          Int
-  recipe          Recipe          @relation("user_recipes", fields: [recipeId], references: [id])
   recipeId        Int
   // To be expanded later to include notes, ratings, etc.
 
