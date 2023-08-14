@@ -1,4 +1,4 @@
-import React/*, { useState }*/ from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -9,18 +9,18 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 // import { useNavigate } from "react-router-dom";
 
 export default function Login(/*{ setUser }*/) {
-  // const [username, setUsername] = useState<string | null>(null);
-  // const [password, setPassword] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
   // const [loginErrors, setLoginErrors] = useState<string[]>([]);
   // const navigate = useNavigate();
 
-  // const handleUsernameChange = (event) => {
-  //   setUsername(event.target.value);
-  // };
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
 
-  // const handlePasswordChange = (event) => {
-  //   setPassword(event.target.value);
-  // };
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
 
   // const handleSubmit = async (event) => {
   //   event.preventDefault();
@@ -88,7 +88,7 @@ export default function Login(/*{ setUser }*/) {
             label="Username"
             name="username"
             autoFocus
-            // onChange={handleUsernameChange}
+            onChange={handleUsernameChange}
           />
           <TextField
             margin="normal"
@@ -98,7 +98,7 @@ export default function Login(/*{ setUser }*/) {
             label="Password"
             type="password"
             id="password"
-            // onChange={handlePasswordChange}
+            onChange={handlePasswordChange}
           />
           <Button
             type="submit"
