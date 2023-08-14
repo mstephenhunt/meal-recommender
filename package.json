@@ -10,11 +10,11 @@
   },
   "scripts": {
     "lint-staged": "lint-staged",
-    "lint": "eslint \"**/*.ts\" --fix"
+    "lint": "eslint \"**/*.{ts,tsx}\" --fix"
   },
   "lint-staged": {
-    "*.{js,ts}": [
-      "eslint \"**/*.ts\" --fix"
+    "*.{js,ts,tsx}": [
+      "eslint \"**/*.{ts,tsx}\" --fix"
     ]
   },
   "devDependencies": {
