@@ -16,6 +16,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "test:unit": "jest --config ./jest-unit.config.ts --runInBand",
+    "test:integration": "jest --config ./jest-integration.config.ts --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
