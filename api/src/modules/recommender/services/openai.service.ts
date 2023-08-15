@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
 import {
   OpenAIMessage,
   SuggestNextMealInput,
-  Meal,
+  OpenAIMeal,
   OpenAIRole,
 } from '../types';
 
@@ -22,25 +22,29 @@ export class OpenaiService {
     this.apiKey = this.configService.get<string>('OPENAI_API_KEY');
   }
 
-  public async requestRecipe(input: { recipeName: string }): Promise<Meal> {
+  public async requestRecipe(input: {
+    recipeName: string;
+  }): Promise<OpenAIMeal> {
     const initializeMessage = {
       role: OpenAIRole.SYSTEM,
-      content: `Please provide a recipe for ${input.recipeName} in the JSON format of { "name": "meal name", "ingredients": ["ingredient 1", "ingredient 2"],
+      content: `Please provide a recipe for ${input.recipeName} in the JSON format of { "name": "meal name", "ingredients": ["name" : "flour", "quantity": 1, "unit": "cup"],
       "instructions": "instructions" }`,
     };
 
-    const response = (await this.sendMessage([
-      initializeMessage,
-    ])) as unknown as Meal;
+    const response = JSON.parse(
+      await this.sendMessage([initializeMessage]),
+    ) as unknown as OpenAIMeal;
 
     return response;
   }
 
-  public async suggestNextMeal(input: SuggestNextMealInput): Promise<Meal> {
+  public async suggestNextMeal(
+    input: SuggestNextMealInput,
+  ): Promise<OpenAIMeal> {
     const initializeMessage = {
       role: OpenAIRole.SYSTEM,
       content: `You will be provided a list of meals with their ingredients and instructions. Please choose a ${input.type} meal 
-      to cook next. This should be in the JSON format of { "name": "meal name", "ingredients": ["ingredient 1", "ingredient 2"],
+      to cook next. This should be in the JSON format of { "name": "meal name", "ingredients": ["name": "flour", "quantity": 1, "unit": "cup"],
       "instructions": "instructions" }`,
     };
 
@@ -52,12 +56,12 @@ export class OpenaiService {
     const response = (await this.sendMessage([
       initializeMessage,
       ...previousMealMessages,
-    ])) as unknown as Meal;
+    ])) as unknown as OpenAIMeal;
 
     return response;
   }
 
-  private async sendMessage(messages: OpenAIMessage[]): Promise<object> {
+  private async sendMessage(messages: OpenAIMessage[]): Promise<string> {
     const streamResponse = await this.httpService.post(
       'https://api.openai.com/v1/chat/completions',
       {

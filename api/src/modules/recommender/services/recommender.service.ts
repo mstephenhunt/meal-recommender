@@ -1,14 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { OpenaiService } from './openai.service';
-import { Meal } from '../types';
+import { OpenAIMeal } from '../types';
+import { RecipeInput } from '../../recipe/types';
+import { RecipeService } from '../../recipe/services/recipe.service';
 
 @Injectable()
 export class RecommenderService {
-  constructor(private readonly openaiService: OpenaiService) {}
+  constructor(
+    private readonly openaiService: OpenaiService,
+    private readonly recipeService: RecipeService,
+  ) {}
 
-  public async requestRecipe(input: { recipeName: string }): Promise<Meal> {
-    const response = await this.openaiService.requestRecipe(input);
+  public async requestRecipe(input: {
+    recipeName: string;
+  }): Promise<OpenAIMeal> {
+    const recipe = await this.openaiService.requestRecipe(input);
 
-    return response;
+    const recipeInput: RecipeInput = {
+      name: recipe.name,
+      instructions: recipe.instructions,
+      recipeIngredients: recipe.ingredients.map((ingredient) => ({
+        ingredient: {
+          name: ingredient.name,
+        },
+        quantity: ingredient.quantity,
+        unit: ingredient.unit,
+      })),
+    };
+
+    await this.recipeService.saveRecipe(recipeInput);
+
+    return recipe;
   }
 }

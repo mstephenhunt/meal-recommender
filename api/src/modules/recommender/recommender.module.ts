@@ -6,9 +6,10 @@ import { HttpModule } from '@nestjs/axios';
 import { UtilsModule } from '../utils/utils.module';
 import { RecommenderController } from './controllers/recommender.controller';
 import { RecommenderService } from './services/recommender.service';
+import { RecipeModule } from '../recipe/recipe.module';
 
 @Module({
-  imports: [ConfigModule, HttpModule, UtilsModule],
+  imports: [ConfigModule, HttpModule, UtilsModule, RecipeModule],
   controllers: [OpenaiTestControllerController, RecommenderController],
   providers: [OpenaiService, RecommenderService],
 })

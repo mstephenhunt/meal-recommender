@@ -15,11 +15,17 @@ export enum SuggestNextMealType {
 
 export type SuggestNextMealInput = {
   type: SuggestNextMealType;
-  meals: Meal[];
+  meals: OpenAIMeal[];
 };
 
-export type Meal = {
+export type OpenAIMeal = {
   name: string;
-  ingredients: string[];
+  ingredients: OpenAIIngredient[];
   instructions: string;
+};
+
+export type OpenAIIngredient = {
+  name: string;
+  quantity: number;
+  unit: string;
 };
