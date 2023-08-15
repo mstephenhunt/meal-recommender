@@ -17,6 +17,7 @@ export class RecipeService {
     }));
 
     // Start a prisma transaction
+    let fullRecipe = undefined;
     await this.prisma.$transaction(async (prisma) => {
       // Upsert the ingredients
       const savedIngredients = await Promise.all<Ingredient>(
@@ -50,7 +51,7 @@ export class RecipeService {
       );
 
       // Finally, return the recipe
-      return {
+      fullRecipe = {
         id: savedRecipe.id,
         name: savedRecipe.name,
         instructions: savedRecipe.instructions,
@@ -63,6 +64,10 @@ export class RecipeService {
       };
     });
 
-    throw new Error('Failed to save recipe');
+    if (fullRecipe) {
+      return fullRecipe;
+    } else {
+      throw new Error('Failed to save recipe');
+    }
   }
 }
