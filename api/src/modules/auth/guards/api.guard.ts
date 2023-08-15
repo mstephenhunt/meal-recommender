@@ -10,8 +10,6 @@ export class APIGuard implements CanActivate {
   }
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    return true;
-
     try {
       const req = context.switchToHttp().getRequest();
 
