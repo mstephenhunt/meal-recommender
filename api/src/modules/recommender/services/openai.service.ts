@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
+import { RequestCacheService } from '../../utils/services/request-cache.service';
 
 @Injectable()
 export class OpenaiService {
@@ -9,6 +10,7 @@ export class OpenaiService {
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    private readonly requestCacheService: RequestCacheService,
   ) {
     this.apiKey = this.configService.get<string>('OPENAI_API_KEY');
   }
@@ -30,6 +32,8 @@ export class OpenaiService {
         },
       )
       .toPromise();
+
+    await this.requestCacheService.cacheAxiosRequestResponse(response);
 
     return response.data;
   }
