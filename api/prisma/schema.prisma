@@ -58,3 +58,36 @@ model UserRecipe {
 
   @@map("user_recipes")
 }
+
+model RequestCache {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  url             String
+  method          String
+  headers         Json?
+  body            Json?
+
+  @@map("request_cache")
+}
+
+model ResponseCache {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  statusCode      Int             @map("status_code")
+  headers         Json?
+  body            Json?
+
+  @@map("response_cache")
+}
+
+model RequestResponseCache {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  requestId       Int
+  responseId      Int
+
+  @@map("request_response_cache")
+}
