@@ -4,10 +4,12 @@ import { OpenaiTestControllerController } from './controllers/openai-test-contro
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { UtilsModule } from '../utils/utils.module';
+import { RecommenderController } from './controllers/recommender.controller';
+import { RecommenderService } from './services/recommender.service';
 
 @Module({
   imports: [ConfigModule, HttpModule, UtilsModule],
-  controllers: [OpenaiTestControllerController],
-  providers: [OpenaiService],
+  controllers: [OpenaiTestControllerController, RecommenderController],
+  providers: [OpenaiService, RecommenderService],
 })
 export class RecommenderModule {}
