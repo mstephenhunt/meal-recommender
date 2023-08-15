@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,4 +15,46 @@ model User {
   password        String
 
   @@map("users")
+}
+
+model Ingredient {
+  id                Int                @id                              @default(autoincrement())
+  createdAt         DateTime           @default(now())                  @map("created_at")
+  updatedAt         DateTime           @updatedAt                       @map("updated_at")
+  name              String             @unique
+
+  @@map("ingredients")
+}
+
+model Recipe {
+  id              Int                   @id @default(autoincrement())
+  createdAt         DateTime            @default(now())                  @map("created_at")
+  updatedAt         DateTime            @updatedAt                       @map("updated_at")
+  name              String              @unique 
+  instructions      String
+
+  @@map("recipes")
+}
+
+model RecipeIngredient {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  recipeId        Int
+  ingredientId    Int
+  quantity        Int
+  unit            String
+
+  @@map("recipe_ingredients")
+}
+
+model UserRecipe {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  userId          Int
+  recipeId        Int
+  // To be expanded later to include notes, ratings, etc.
+
+  @@map("user_recipes")
 }
