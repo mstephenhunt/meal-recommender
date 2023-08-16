@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { OpenaiService } from './openai.service';
-import { OpenAIMeal } from '../types';
+import {
+  OpenAIMeal,
+  SuggestNextMealType,
+  SuggestNextMealInput,
+} from '../types';
 import { RecipeInput } from '../../recipe/types';
 import { RecipeService } from '../../recipe/services/recipe.service';
 import { UserContextService } from '../../user/services/user-context.service';
 import { PrismaService } from '../../db/services/prisma.service';
 import { Logger } from 'nestjs-pino';
+import { DietaryRestrictionService } from '../../recipe/services/dietary-restriction.service';
 
 @Injectable()
 export class RecommenderService {
@@ -15,7 +20,30 @@ export class RecommenderService {
     private readonly userContextService: UserContextService,
     private readonly prismaService: PrismaService,
     private readonly logger: Logger,
+    private readonly dietaryRestrictionService: DietaryRestrictionService,
   ) {}
+
+  public async suggestNextMeal(): Promise<OpenAIMeal> {
+    const userId = await this.userContextService.userId;
+
+    const recipeNames = await this.recipeService.getUserRecipeNames(userId);
+    const dietaryRestrictions =
+      await this.dietaryRestrictionService.getUserDietaryRestrictionNames(
+        userId,
+      );
+
+    const suggestNextMealInput: SuggestNextMealInput = {
+      type: SuggestNextMealType.DIFFERENT,
+      mealNames: recipeNames,
+      dietaryRestrictions,
+    };
+
+    const recipe = await this.openaiService.suggestNextMeal(
+      suggestNextMealInput,
+    );
+
+    return recipe;
+  }
 
   public async requestRecipe(input: {
     recipeName: string;

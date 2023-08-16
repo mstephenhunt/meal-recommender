@@ -42,4 +42,14 @@ export class RecommenderController {
 
     return response as unknown as string;
   }
+
+  @UseGuards(UserGuard)
+  @Get('/suggest-next-meal')
+  public async suggestNextMeal(): Promise<string> {
+    this.logger.log('Suggesting next meal');
+
+    const response = await this.recommenderService.suggestNextMeal();
+
+    return response as unknown as string;
+  }
 }

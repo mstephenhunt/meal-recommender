@@ -65,24 +65,25 @@ export class OpenaiService {
   ): Promise<OpenAIMeal> {
     const initializeMessage = {
       role: OpenAIRole.SYSTEM,
-      content: `You will be provided a list of meals with their ingredients and instructions. Please choose a ${input.type} meal 
-      to cook next. ${this.responseFormat}`,
+      content: `You will be provided a list of meal names and a list of dietary restrictions. Please choose a ${
+        input.type
+      } type of meal 
+      to cook next that fits within those dietary restrictions. ${
+        this.responseFormat
+      }
+      
+      Meal names: ${input.mealNames.join(', ')}
+      Dietary restrictions: ${input.dietaryRestrictions.join(', ')}
+      `,
     };
 
-    const previousMealMessages = input.meals.map((meal) => ({
-      role: OpenAIRole.SYSTEM,
-      content: JSON.stringify(meal),
-    }));
-
-    const messages = [initializeMessage, ...previousMealMessages];
-
     this.logger.log('Sending message to OpenAI', {
-      message: messages,
+      message: initializeMessage,
     });
 
-    const response = (await this.sendMessage(
-      messages,
-    )) as unknown as OpenAIMeal;
+    const response = JSON.parse(
+      await this.sendMessage([initializeMessage]),
+    ) as unknown as OpenAIMeal;
 
     this.logger.log('Received response from OpenAI', {
       response,
