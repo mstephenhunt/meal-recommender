@@ -14,8 +14,19 @@ import { Logger } from 'nestjs-pino';
 @Injectable()
 export class OpenaiService {
   private readonly apiKey: string;
-  private readonly responseFormat = `Have your message return in the format of JSON { "name": "meal name", "ingredients": ["name": "flour", "quantity": 1, "unit": "cup"],
-  "instructions": "instructions" }. Represent any fractions as decimals.`;
+  private readonly responseFormat = `
+    Have your message return in the format of JSON 
+      { 
+        "name": "meal name", 
+        "ingredients": [
+          "name": "flour", 
+          "quantity": 0.5, 
+          "unit": "cup"
+        ],
+        "instructions": "instructions" 
+      }
+    Ensure none of the quantity values are fractional, they should all be decimal fields.
+    Ensure that the JSON is parseable via JSON.parse().`;
 
   constructor(
     private readonly configService: ConfigService,
