@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import { PrismaService } from '../../db/services/prisma.service';
+import {
+  PrismaService,
+  titleCaseString,
+} from '../../db/services/prisma.service';
 import { DietaryRestrictionService } from '../../recipe/services/dietary-restriction.service';
 import { UserContextService } from './user-context.service';
 
@@ -18,10 +21,9 @@ export class UserPreferencesService {
   }): Promise<void> {
     const { dietaryRestrictionName } = input;
 
-    const titleCaseDietaryRestrictionName = dietaryRestrictionName
-      .split(' ')
-      .map((word) => word[0].toUpperCase() + word.slice(1))
-      .join(' ');
+    const titleCaseDietaryRestrictionName = titleCaseString(
+      dietaryRestrictionName,
+    );
 
     const userId = await this.userContextService.userId;
 
