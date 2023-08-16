@@ -10,6 +10,7 @@ import { RecipeModule } from '../recipe/recipe.module';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
 import { DbModule } from '../db/db.module';
+import { DietaryRestrictionService } from '../recipe/services/dietary-restriction.service';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DbModule } from '../db/db.module';
     DbModule,
   ],
   controllers: [OpenaiTestControllerController, RecommenderController],
-  providers: [OpenaiService, RecommenderService],
+  providers: [OpenaiService, RecommenderService, DietaryRestrictionService],
+  exports: [DietaryRestrictionService],
 })
 export class RecommenderModule {}

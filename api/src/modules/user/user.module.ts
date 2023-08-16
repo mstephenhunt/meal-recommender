@@ -4,11 +4,20 @@ import { AuthModule } from '../auth/auth.module';
 import { DbModule } from '../db/db.module';
 import { UserController } from './controllers/user.controller';
 import { UserContextService } from './services/user-context.service';
+import { UserPreferencesController } from './controllers/user-preferences.controller';
+import { ConfigModule } from '@nestjs/config';
+import { UserPreferencesService } from './services/user-preferences.service';
+import { RecipeModule } from '../recipe/recipe.module';
 
 @Module({
-  controllers: [UserController],
-  imports: [AuthModule, DbModule],
-  providers: [UserService, UserContextService],
+  imports: [AuthModule, DbModule, ConfigModule.forRoot(), RecipeModule],
+  controllers: [UserController, UserPreferencesController],
+  providers: [
+    UserService,
+    UserContextService,
+    UserPreferencesService,
+    UserContextService,
+  ],
   exports: [UserService, UserContextService],
 })
 export class UserModule {}
