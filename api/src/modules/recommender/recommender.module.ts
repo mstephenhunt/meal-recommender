@@ -7,9 +7,20 @@ import { UtilsModule } from '../utils/utils.module';
 import { RecommenderController } from './controllers/recommender.controller';
 import { RecommenderService } from './services/recommender.service';
 import { RecipeModule } from '../recipe/recipe.module';
+import { AuthModule } from '../auth/auth.module';
+import { UserModule } from '../user/user.module';
+import { DbModule } from '../db/db.module';
 
 @Module({
-  imports: [ConfigModule, HttpModule, UtilsModule, RecipeModule],
+  imports: [
+    ConfigModule,
+    HttpModule,
+    UtilsModule,
+    RecipeModule,
+    AuthModule,
+    UserModule,
+    DbModule,
+  ],
   controllers: [OpenaiTestControllerController, RecommenderController],
   providers: [OpenaiService, RecommenderService],
 })
