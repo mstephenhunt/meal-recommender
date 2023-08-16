@@ -6,11 +6,18 @@ export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  async onModuleInit() {
+  public async onModuleInit() {
     await this.$connect();
   }
 
-  async onModuleDestroy() {
+  public async onModuleDestroy() {
     await this.$disconnect();
   }
+}
+
+/**
+ * Takes in string. Makes all lowercase, trims whitespace.
+ */
+export function normalizeString(input: string): string {
+  return input.toLowerCase().trim();
 }
