@@ -44,7 +44,8 @@ export class RecipeService {
               ingredientId: ingredient.id,
               recipeId: savedRecipe.id,
               quantity: recipe.recipeIngredients[index].quantity,
-              unit: recipe.recipeIngredients[index].unit,
+              // This is defaulting to 'count' because sometimes the unit is undefined
+              unit: recipe.recipeIngredients[index].unit || 'count',
             },
           }),
         ),
