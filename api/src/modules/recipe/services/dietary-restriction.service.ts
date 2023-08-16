@@ -4,6 +4,7 @@ import {
   normalizeString,
 } from '../../db/services/prisma.service';
 import { Logger } from 'nestjs-pino';
+import { Prisma } from '@prisma/client';
 
 type DietaryRestrictionInput = {
   name: string;
@@ -68,5 +69,28 @@ export class DietaryRestrictionService {
       id: newDietaryRestriction.id,
       name: newDietaryRestriction.displayName,
     };
+  }
+
+  public async getUserDietaryRestrictionNames(
+    userId: number,
+  ): Promise<string[]> {
+    const dietaryRestrictions = await this.prisma.$queryRaw<
+      { display_name: string }[]
+    >(
+      Prisma.sql`
+        SELECT
+          dr.display_name
+        FROM
+          public.users u
+          JOIN users_dietary_restrictions udr ON udr.user_id = u.id
+          JOIN dietary_restrictions dr on dr.id = udr.dietary_restriction_id
+        WHERE
+          u.id = ${userId};
+    `,
+    );
+
+    return dietaryRestrictions.map(
+      (dietaryRestriction) => dietaryRestriction.display_name,
+    );
   }
 }

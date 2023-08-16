@@ -15,7 +15,8 @@ export enum SuggestNextMealType {
 
 export type SuggestNextMealInput = {
   type: SuggestNextMealType;
-  meals: OpenAIMeal[];
+  mealNames: string[];
+  dietaryRestrictions?: string[];
 };
 
 export type OpenAIMeal = {

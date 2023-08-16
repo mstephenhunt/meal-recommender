@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../db/services/prisma.service';
 import { Ingredient, Recipe, RecipeInput } from '../types';
 import { IngredientService } from './ingredient.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class RecipeService {
@@ -70,5 +71,22 @@ export class RecipeService {
     } else {
       throw new Error('Failed to save recipe');
     }
+  }
+
+  public async getUserRecipeNames(userId: number): Promise<string[]> {
+    const recipes = await this.prisma.$queryRaw<{ name: string }[]>(
+      Prisma.sql`
+        SELECT
+          r.name
+        FROM
+          public.users u
+          JOIN public.user_recipes ur on ur."userId" = u.id
+          JOIN public.recipes r on r.id = ur."recipeId"
+        WHERE
+          u.id = ${userId};     
+      `,
+    );
+
+    return recipes.map((recipe) => recipe.name);
   }
 }
