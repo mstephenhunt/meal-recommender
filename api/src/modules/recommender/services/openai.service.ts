@@ -9,15 +9,19 @@ import {
   OpenAIMeal,
   OpenAIRole,
 } from '../types';
+import { Logger } from 'nestjs-pino';
 
 @Injectable()
 export class OpenaiService {
   private readonly apiKey: string;
+  private readonly responseFormat = `Have your message return in the format of JSON { "name": "meal name", "ingredients": ["name": "flour", "quantity": 1, "unit": "cup"],
+  "instructions": "instructions" }. Represent any fractions as decimals.`;
 
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
     private readonly requestCacheService: RequestCacheService,
+    private readonly logger: Logger,
   ) {
     this.apiKey = this.configService.get<string>('OPENAI_API_KEY');
   }
@@ -27,13 +31,20 @@ export class OpenaiService {
   }): Promise<OpenAIMeal> {
     const initializeMessage = {
       role: OpenAIRole.SYSTEM,
-      content: `Please provide a recipe for ${input.recipeName} in the JSON format of { "name": "meal name", "ingredients": ["name" : "flour", "quantity": 1, "unit": "cup"],
-      "instructions": "instructions" }`,
+      content: `Please provide a recipe for ${input.recipeName}. ${this.responseFormat}`,
     };
+
+    this.logger.log('Sending message to OpenAI', {
+      message: initializeMessage,
+    });
 
     const response = JSON.parse(
       await this.sendMessage([initializeMessage]),
     ) as unknown as OpenAIMeal;
+
+    this.logger.log('Received response from OpenAI', {
+      response,
+    });
 
     return response;
   }
@@ -44,8 +55,7 @@ export class OpenaiService {
     const initializeMessage = {
       role: OpenAIRole.SYSTEM,
       content: `You will be provided a list of meals with their ingredients and instructions. Please choose a ${input.type} meal 
-      to cook next. This should be in the JSON format of { "name": "meal name", "ingredients": ["name": "flour", "quantity": 1, "unit": "cup"],
-      "instructions": "instructions" }`,
+      to cook next. ${this.responseFormat}`,
     };
 
     const previousMealMessages = input.meals.map((meal) => ({
@@ -53,10 +63,19 @@ export class OpenaiService {
       content: JSON.stringify(meal),
     }));
 
-    const response = (await this.sendMessage([
-      initializeMessage,
-      ...previousMealMessages,
-    ])) as unknown as OpenAIMeal;
+    const messages = [initializeMessage, ...previousMealMessages];
+
+    this.logger.log('Sending message to OpenAI', {
+      message: messages,
+    });
+
+    const response = (await this.sendMessage(
+      messages,
+    )) as unknown as OpenAIMeal;
+
+    this.logger.log('Received response from OpenAI', {
+      response,
+    });
 
     return response;
   }
