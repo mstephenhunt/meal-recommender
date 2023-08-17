@@ -16,13 +16,16 @@ export default function BotBase({ speechText }: BotBaseProps) {
             position: "absolute",
             top: "50%",
             left: "50%",
-            transform: "translate(-95%, -192%)",
+            transform: "translate(-90%, -192%)",
             width: "175px",
             height: "65px",
             textAlign: "center",
             color: "black",
             background: "#ffffff00",
             fontSize: "18px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           {speechText}

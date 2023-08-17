@@ -4,16 +4,12 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
+import MenuBar from '../MenuBar/MenuBar';
 
 export default function MainMenuPage() {
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <div></div> {/* Empty div to push the Log Out button to the right */}
-          <Button color="inherit">Log Out</Button>
-        </Toolbar>
-      </AppBar>
+      <MenuBar />
       <Container
         maxWidth="xs"
         style={{
