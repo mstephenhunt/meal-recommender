@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -7,14 +7,15 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
+import { AuthService } from "./auth.service";
 
-export default function Login() {
+export default function Login(props: { authService: AuthService, setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>}) {
   const [username, setUsername] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [loginErrors, setLoginErrors] = useState<string[]>([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [refreshTimeout, setRefreshTimeout] = useState<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
+
+  const { authService, setIsLoggedIn } = props;
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -22,48 +23,6 @@ export default function Login() {
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
-  };
-
-  const scheduleTokenRefresh = useCallback(() => {
-    const refreshInterval = 60000; // 1 minute
-
-    // Set the token refresh timeout
-    const refreshTimeout = setTimeout(refreshToken, refreshInterval);
-
-    // Save the timeout so we can clean it up later
-    setRefreshTimeout(refreshTimeout);
-  }, []);
-
-  const setJwt = async (response: Response): Promise<void> => {
-    const statusCode = response.status;
-    const responseBody = await response.json();
-
-    if (statusCode === 201) {
-      // If the login was successful, save the JWT from the response into local storage
-      const { jwt } = responseBody;
-      localStorage.setItem("jwt", jwt);
-    } else {
-      throw new Error("An unknown error occurred. Please try again.");
-    }
-  }
-
-  const refreshToken = async () => {
-    try {
-      const baseUrl = process.env.REACT_APP_API_URL;
-
-      const response = await fetch(`${baseUrl}/auth/refresh`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: localStorage.getItem("jwt") }),
-      });
-
-      await setJwt(response);
-
-      // Once refreshed, schedule the next token refresh
-      scheduleTokenRefresh();
-    } catch (error) {
-      navigate("/");
-    }
   };
 
   const handleSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,29 +37,18 @@ export default function Login() {
     });
 
     try {
-      await setJwt(response);
+      await authService.setJwt(response);
+
       setIsLoggedIn(true);
-      scheduleTokenRefresh();
+
       navigate("/home");
     } catch(error) {
+      console.error(error);
+
       // @ts-ignore
       setLoginErrors([error.message]);
     }
   };
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      // Register the initial token refresh timeout after login
-      scheduleTokenRefresh();
-    }
-    
-    // Clean up the timeout when the component unmounts or when the user logs out
-    return () => {
-      if (refreshTimeout) {
-        clearTimeout(refreshTimeout);
-      }
-    };
-  }, [isLoggedIn, refreshTimeout, scheduleTokenRefresh]);
 
   return (
     <Container maxWidth="xs">
