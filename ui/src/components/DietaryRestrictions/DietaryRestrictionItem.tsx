@@ -4,13 +4,14 @@ import Button from "@mui/material/Button";
 
 type DietaryRestrictionItemProps = {
   dietaryRestriction: string;
+  onRemove: () => void;
 };
 
-export default function DietaryRestrictionItem(input: DietaryRestrictionItemProps) {
-  const { dietaryRestriction } = input;
+export default function DietaryRestrictionItem(props: DietaryRestrictionItemProps) {
+  const { dietaryRestriction, onRemove } = props;
 
   return (
-      <Box
+    <Box
       key={dietaryRestriction}
       sx={{
         display: "flex",
@@ -34,14 +35,15 @@ export default function DietaryRestrictionItem(input: DietaryRestrictionItemProp
       <Button
         variant="contained"
         color="primary"
-        sx={{ 
-          fontWeight: "bold", 
-          textTransform: "none", 
+        sx={{
+          fontWeight: "bold",
+          textTransform: "none",
           width: "20px",
           minWidth: "20px",
           minHeight: "20px",
-          height: "30px"
+          height: "30px",
         }}
+        onClick={onRemove}
       >
         X
       </Button>

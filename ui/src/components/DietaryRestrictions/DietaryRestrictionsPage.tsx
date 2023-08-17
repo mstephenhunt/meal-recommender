@@ -22,6 +22,12 @@ export default function DietaryRestrictionsPage() {
     }
   };
 
+  const handleRemoveDietaryRestriction = (index: number) => {
+    const updatedRestrictions = [...dietaryRestrictions];
+    updatedRestrictions.splice(index, 1);
+    setDietaryRestrictions(updatedRestrictions);
+  };
+
   return (
     <div
       style={{
@@ -85,19 +91,20 @@ export default function DietaryRestrictionsPage() {
             flexGrow: 1,
           }}
         > 
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-            }}
-          >
-            {dietaryRestrictions.map((dietaryRestriction) => (
-              <DietaryRestrictionItem
-                dietaryRestriction={dietaryRestriction}
-              />
-            ))}
-          </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+          }}
+        >
+          {dietaryRestrictions.map((dietaryRestriction, index) => (
+            <DietaryRestrictionItem
+              dietaryRestriction={dietaryRestriction}
+              onRemove={() => handleRemoveDietaryRestriction(index)}
+            />
+          ))}
+        </Box>
         </Box>
         <Box
           sx={{
