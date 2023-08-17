@@ -45,4 +45,10 @@ export class AuthService {
 
     return token;
   }
+
+  public async refreshToken(token: string): Promise<string> {
+    const { userId } = this.jwtService.verify(token);
+
+    return this.getJwt(userId);
+  }
 }
