@@ -4,6 +4,9 @@ export class AuthService {
 
   constructor(setLoginState: (loggedIn: boolean) => void) {
     this.setLoginState = setLoginState;
+
+    // Have to bind these functions to the class so they can be called from
+    // setTimeout and clearTimeout
     this.refreshToken = this.refreshToken.bind(this);
     this.setJwt = this.setJwt.bind(this);
   }
