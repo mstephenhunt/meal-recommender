@@ -16,7 +16,7 @@ export default function BotBase({ speechText }: BotBaseProps) {
             position: "absolute",
             top: "50%",
             left: "50%",
-            transform: "translate(-90%, -192%)",
+            transform: "translate(-93%, -192%)",
             width: "175px",
             height: "65px",
             textAlign: "center",
