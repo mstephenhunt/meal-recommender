@@ -7,12 +7,15 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
+import { AuthService } from "./auth.service";
 
-export default function Login(/*{ setUser }*/) {
+export default function Login(props: { authService: AuthService, setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>}) {
   const [username, setUsername] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [loginErrors, setLoginErrors] = useState<string[]>([]);
   const navigate = useNavigate();
+
+  const { authService, setIsLoggedIn } = props;
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -33,20 +36,18 @@ export default function Login(/*{ setUser }*/) {
       body: JSON.stringify({ email: username, password }),
     });
 
-    const statusCode = response.status;
-    const responseBody = await response.json();
+    try {
+      await authService.setJwt(response);
 
-    if (statusCode === 201) {
-      // If the login was successful, save the JWT from the response into local storage
-      const { jwt } = responseBody;
-      localStorage.setItem("jwt", jwt);
+      setIsLoggedIn(true);
 
       navigate("/home");
+    } catch(error) {
+      console.error(error);
 
-      return;
+      // @ts-ignore
+      setLoginErrors([error.message]);
     }
-
-    setLoginErrors(["An unknown error occurred. Please try again."]);
   };
 
   return (
