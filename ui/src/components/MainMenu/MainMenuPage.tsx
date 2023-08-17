@@ -2,8 +2,6 @@ import React from "react";
 import BotBase from "../BotBase/BotBase";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import MenuBar from '../MenuBar/MenuBar';
 
 export default function MainMenuPage() {
