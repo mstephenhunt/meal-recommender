@@ -5,6 +5,7 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import DietaryRestrictionItem from "./DietaryRestrictionItem";
 
 export default function DietaryRestrictionsPage() {
   const [currentDietaryRestriction, setCurrentDietaryRestriction] = useState("");
@@ -21,13 +22,25 @@ export default function DietaryRestrictionsPage() {
     }
   };
 
+  const handleRemoveDietaryRestriction = (index: number) => {
+    const updatedRestrictions = [...dietaryRestrictions];
+    updatedRestrictions.splice(index, 1);
+    setDietaryRestrictions(updatedRestrictions);
+  };
+
   return (
-    <div>
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <MenuBar />
       <Container
         maxWidth="xs"
         style={{
-          height: "100vh",
+          height: "100%",
           display: "flex",
           flexDirection: "column",
         }}
@@ -67,7 +80,7 @@ export default function DietaryRestrictionsPage() {
         </Box>
         <Box
           sx={{
-            width: "auto%",
+            width: "auto",
             height: "auto",
             minHeight: "100px",
             marginTop: "15px",
@@ -75,9 +88,23 @@ export default function DietaryRestrictionsPage() {
             border: "1px solid",
             borderColor: "rgba(0, 0, 0, 0.23)",
             borderRadius: "5px",
+            flexGrow: 1,
+          }}
+        > 
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
           }}
         >
-          Dietary Restrictions Here
+          {dietaryRestrictions.map((dietaryRestriction, index) => (
+            <DietaryRestrictionItem
+              dietaryRestriction={dietaryRestriction}
+              onRemove={() => handleRemoveDietaryRestriction(index)}
+            />
+          ))}
+        </Box>
         </Box>
         <Box
           sx={{
@@ -90,6 +117,7 @@ export default function DietaryRestrictionsPage() {
             color="primary"
             sx={{ 
               marginTop: "20px", 
+              marginBottom: "20px",
               width: "100%", 
               fontWeight: "bold", 
               textTransform: "none" ,
