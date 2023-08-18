@@ -30,3 +30,7 @@ export type OpenAIIngredient = {
   quantity: number;
   unit: string;
 };
+
+export type RequestRecipeNamesInput = {
+  dietaryRestrictions?: string[];
+};

@@ -8,6 +8,7 @@ import {
   SuggestNextMealInput,
   OpenAIMeal,
   OpenAIRole,
+  RequestRecipeNamesInput,
 } from '../types';
 import { Logger } from 'nestjs-pino';
 
@@ -27,6 +28,14 @@ export class OpenaiService {
       }
     Ensure none of the quantity values are fractional, they should all be decimal fields.
     Ensure that the JSON is parseable via JSON.parse().`;
+  private readonly recipeNamesResponseFormat = `
+    Have your message return in the format of JSON
+      [
+        "meal name 1",
+        "meal name 2",
+        "meal name 3"
+      ]
+    Ensure that the JSON is parseable via JSON.parse().`;
 
   constructor(
     private readonly configService: ConfigService,
@@ -35,6 +44,31 @@ export class OpenaiService {
     private readonly logger: Logger,
   ) {
     this.apiKey = this.configService.get<string>('OPENAI_API_KEY');
+  }
+
+  public async requestRecipeNames(
+    input: RequestRecipeNamesInput,
+  ): Promise<string[]> {
+    const initializeMessage = {
+      role: OpenAIRole.SYSTEM,
+      content: `Please provide a list of five recipe names that fit within the following dietary restrictions: ${input.dietaryRestrictions.join(
+        ', ',
+      )}. ${this.recipeNamesResponseFormat}`,
+    };
+
+    this.logger.log('Sending message to OpenAI', {
+      message: initializeMessage,
+    });
+
+    const response = JSON.parse(
+      await this.sendMessage([initializeMessage]),
+    ) as unknown as string[];
+
+    this.logger.log('Received response from OpenAI', {
+      response,
+    });
+
+    return response;
   }
 
   public async requestRecipe(input: {
