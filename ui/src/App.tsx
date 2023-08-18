@@ -17,16 +17,32 @@ export default function App() {
     }
   }, [isLoggedIn, authService]);
 
+  const routes = (
+    <Routes>
+      <Route
+        path="/"
+        element={<Login authService={authService} setIsLoggedIn={setIsLoggedIn} />}
+      />
+      <Route
+        path="/home"
+        element={<MainMenuPage setIsLoggedIn={setIsLoggedIn} />}
+      />
+      <Route
+        path="/dietary-restrictions"
+        element={<DietaryRestrictionsPage setIsLoggedIn={setIsLoggedIn} />}
+      />
+    </Routes>
+  );
+
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Login  
-          authService={authService}
-          setIsLoggedIn={setIsLoggedIn}
-        />} />
-        <Route path="/home" element={<MainMenuPage />} />
-        <Route path="/dietary-restrictions" element={<DietaryRestrictionsPage />} />
-      </Routes>
+      {isLoggedIn ? (
+        // If logged in, show the routes
+        routes
+      ) : (
+        // If not logged in, redirect to the login page
+        <Login authService={authService} setIsLoggedIn={setIsLoggedIn} />
+      )}
     </Router>
   );
 }
