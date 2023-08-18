@@ -33,7 +33,7 @@ export default function App() {
         element={<DietaryRestrictionsPage setIsLoggedIn={setIsLoggedIn} />}
       />
       <Route
-        path="recipe-suggestor"
+        path="/recipe-suggestor"
         element={<RecipeSuggestor setIsLoggedIn={setIsLoggedIn} />}
       />
     </Routes>
