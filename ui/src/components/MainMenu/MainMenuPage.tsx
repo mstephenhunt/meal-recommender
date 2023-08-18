@@ -31,6 +31,7 @@ export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolea
         />
         <Button
           variant="contained"
+          disabled
           sx={{
             height: "70px",
             width: "100%",
@@ -58,6 +59,7 @@ export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolea
         </Button>
         <Button
           variant="contained"
+          disabled
           sx={{
             height: "70px",
             width: "100%",
