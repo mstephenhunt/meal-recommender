@@ -13,6 +13,10 @@ export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolea
     navigate('/dietary-restrictions');
   };
 
+  const handleSuggestRecipes = () => {
+    navigate('/recipe-suggestor');
+  };
+
   return (
     <div>
       <MenuBar 
@@ -31,7 +35,6 @@ export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolea
         />
         <Button
           variant="contained"
-          disabled
           sx={{
             height: "70px",
             width: "100%",
@@ -40,6 +43,7 @@ export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolea
             fontWeight: "bold",
             textTransform: "none",
           }}
+          onClick={handleSuggestRecipes}
         >
           Suggest Recipes
         </Button>
