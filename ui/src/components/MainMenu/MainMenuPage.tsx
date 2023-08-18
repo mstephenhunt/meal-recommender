@@ -3,9 +3,15 @@ import BotBase from "../BotBase/BotBase";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import MenuBar from '../MenuBar/MenuBar';
+import { useNavigate } from 'react-router-dom';
 
 export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolean) => void }) {
   const { setIsLoggedIn } = props;
+  const navigate = useNavigate();
+
+  const handleAddDietaryRestrictions = () => {
+    navigate('/dietary-restrictions');
+  };
 
   return (
     <div>
@@ -31,6 +37,7 @@ export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolea
             marginTop: "20px",
             backgroundColor: "#53b94f",
             fontWeight: "bold",
+            textTransform: "none",
           }}
         >
           Suggest Recipes
@@ -43,7 +50,9 @@ export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolea
             marginTop: "20px",
             backgroundColor: "#53b94f",
             fontWeight: "bold",
+            textTransform: "none",
           }}
+          onClick={handleAddDietaryRestrictions}
         >
           Add Dietary Restrictions
         </Button>
@@ -55,6 +64,7 @@ export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolea
             marginTop: "20px",
             backgroundColor: "#53b94f",
             fontWeight: "bold",
+            textTransform: "none",
           }}
         >
           Add Previous Meals
