@@ -1,10 +1,8 @@
 export class DietaryRestrictionsService {
-  private readonly baseUrl = process.env.REACT_APP_API_URL;
-
-  constructor() {}
-
-  public async saveDietaryRestriction(dietaryRestrictionName: string): Promise<void> {
-    await fetch(`${this.baseUrl}/user-preferences/dietary-restriction`, {
+  public static async saveDietaryRestriction(dietaryRestrictionName: string): Promise<void> {
+    const baseUrl = process.env.REACT_APP_API_URL;
+   
+    await fetch(`${baseUrl}/user-preferences/dietary-restriction`, {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",
@@ -14,8 +12,10 @@ export class DietaryRestrictionsService {
     });
   }
 
-  public async deleteDietaryRestriction(dietaryRestrictionName: string): Promise<void> {
-    await fetch(`${this.baseUrl}/user-preferences/dietary-restriction`, {
+  public static async deleteDietaryRestriction(dietaryRestrictionName: string): Promise<void> {
+    const baseUrl = process.env.REACT_APP_API_URL;
+   
+    await fetch(`${baseUrl}/user-preferences/dietary-restriction`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -25,8 +25,10 @@ export class DietaryRestrictionsService {
     });
   }
 
-  public async getCurrentDietaryRestrictions(): Promise<string[]> {
-    const response = await fetch(`${this.baseUrl}/user-preferences/dietary-restriction`, {
+  public static async getCurrentDietaryRestrictions(): Promise<string[]> {
+    const baseUrl = process.env.REACT_APP_API_URL;
+
+    const response = await fetch(`${baseUrl}/user-preferences/dietary-restriction`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -34,8 +36,12 @@ export class DietaryRestrictionsService {
       },
     });
 
-    const responseBody = await response.json();
+    const responseBody = await response.json() as { displayName: string }[];
+    
+    if (response.ok) {
+      return responseBody.map((dietaryRestriction) => dietaryRestriction.displayName);
+    }
 
-    return responseBody.dietaryRestrictions;
+    return [];
   }
 }

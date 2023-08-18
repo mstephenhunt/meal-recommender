@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MenuBar from '../MenuBar/MenuBar';
 import BotBase from "../BotBase/BotBase";
 import Container from "@mui/material/Container";
@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import DietaryRestrictionItem from "./DietaryRestrictionItem";
 import { useNavigate } from "react-router-dom";
+import { DietaryRestrictionsService } from "./dietary-restrictions.service";
 
 export default function DietaryRestrictionsPage(props: { setIsLoggedIn: (isLoggedIn: boolean) => void }) {
   const { setIsLoggedIn } = props;
@@ -20,6 +21,20 @@ export default function DietaryRestrictionsPage(props: { setIsLoggedIn: (isLogge
     navigate('/home');
   };
 
+  useEffect(() => {
+    // Fetch dietary restrictions and set them in the state
+    const fetchDietaryRestrictions = async () => {
+      try {
+        const restrictions = await DietaryRestrictionsService.getCurrentDietaryRestrictions();
+        setDietaryRestrictions(restrictions);
+      } catch (error) {
+        console.error("Error fetching dietary restrictions:", error);
+      }
+    };
+
+    fetchDietaryRestrictions();
+  }, []); // Empty dependency array ensures it only runs on mount
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentDietaryRestriction(event.target.value);
   };
@@ -28,10 +43,15 @@ export default function DietaryRestrictionsPage(props: { setIsLoggedIn: (isLogge
     if (currentDietaryRestriction.trim() !== "") {
       setDietaryRestrictions([...dietaryRestrictions, currentDietaryRestriction]);
       setCurrentDietaryRestriction("");
+
+      DietaryRestrictionsService.saveDietaryRestriction(currentDietaryRestriction);
     }
   };
 
   const handleRemoveDietaryRestriction = (index: number) => {
+    const toDelete = dietaryRestrictions[index];
+    DietaryRestrictionsService.deleteDietaryRestriction(toDelete);
+
     const updatedRestrictions = [...dietaryRestrictions];
     updatedRestrictions.splice(index, 1);
     setDietaryRestrictions(updatedRestrictions);
@@ -111,6 +131,7 @@ export default function DietaryRestrictionsPage(props: { setIsLoggedIn: (isLogge
         >
           {dietaryRestrictions.map((dietaryRestriction, index) => (
             <DietaryRestrictionItem
+              key={index}
               dietaryRestriction={dietaryRestriction}
               onRemove={() => handleRemoveDietaryRestriction(index)}
             />

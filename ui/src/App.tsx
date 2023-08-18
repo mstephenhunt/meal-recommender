@@ -4,7 +4,6 @@ import MainMenuPage from './components/MainMenu/MainMenuPage';
 import Login from './components/Login/Login';
 import DietaryRestrictionsPage from './components/DietaryRestrictions/DietaryRestrictionsPage';
 import { AuthService } from './components/Login/auth.service';
-import { useNavigate } from "react-router-dom";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
