@@ -4,10 +4,14 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import MenuBar from '../MenuBar/MenuBar';
 
-export default function MainMenuPage() {
+export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolean) => void }) {
+  const { setIsLoggedIn } = props;
+
   return (
     <div>
-      <MenuBar />
+      <MenuBar 
+        setIsLoggedIn={setIsLoggedIn}
+      />
       <Container
         maxWidth="xs"
         style={{

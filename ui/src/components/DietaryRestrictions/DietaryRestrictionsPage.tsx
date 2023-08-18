@@ -7,7 +7,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import DietaryRestrictionItem from "./DietaryRestrictionItem";
 
-export default function DietaryRestrictionsPage() {
+export default function DietaryRestrictionsPage(props: { setIsLoggedIn: (isLoggedIn: boolean) => void }) {
+  const { setIsLoggedIn } = props;
+  
   const [currentDietaryRestriction, setCurrentDietaryRestriction] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
 
@@ -36,7 +38,9 @@ export default function DietaryRestrictionsPage() {
         flexDirection: "column",
       }}
     >
-      <MenuBar />
+      <MenuBar 
+        setIsLoggedIn={setIsLoggedIn}
+      />
       <Container
         maxWidth="xs"
         style={{
