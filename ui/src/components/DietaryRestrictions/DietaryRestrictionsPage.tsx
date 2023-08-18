@@ -6,12 +6,19 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import DietaryRestrictionItem from "./DietaryRestrictionItem";
+import { useNavigate } from "react-router-dom";
 
 export default function DietaryRestrictionsPage(props: { setIsLoggedIn: (isLoggedIn: boolean) => void }) {
   const { setIsLoggedIn } = props;
   
   const [currentDietaryRestriction, setCurrentDietaryRestriction] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
+
+  const navigate = useNavigate();
+
+  const handleDone = () => {
+    navigate('/home');
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentDietaryRestriction(event.target.value);
@@ -127,6 +134,7 @@ export default function DietaryRestrictionsPage(props: { setIsLoggedIn: (isLogge
               textTransform: "none" ,
               height: "70px",
             }}
+            onClick={handleDone}
           >
             Done
           </Button>
