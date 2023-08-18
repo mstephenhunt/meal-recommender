@@ -3,12 +3,19 @@ import { RecipeSuggestorService } from './recipe-suggestor.service';
 import MenuBar from '../MenuBar/MenuBar';
 import BotBase from '../BotBase/BotBase';
 import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import { useNavigate } from 'react-router-dom';
 
 export default function RecipeSuggestor(props: { setIsLoggedIn: (isLoggedIn: boolean) => void }) {
   const { setIsLoggedIn } = props;
+  const navigate = useNavigate();
 
   const [recipeNames, setRecipeNames] = useState<string[]>([]);
   
+  const handleBack = () => {
+    navigate('/home');
+  };
+
   useEffect(() => {
     async function getRecipeNames() {
       const recipeNames = await RecipeSuggestorService.getRecipeNames();
@@ -27,7 +34,7 @@ export default function RecipeSuggestor(props: { setIsLoggedIn: (isLoggedIn: boo
       <Container
         maxWidth="xs"
         style={{
-          height: "100%",
+          height: "90vh",
           display: "flex",
           flexDirection: "column",
         }}
@@ -35,15 +42,41 @@ export default function RecipeSuggestor(props: { setIsLoggedIn: (isLoggedIn: boo
         <BotBase
           speechText="Would you like to see any of these recipes?"
         />
-        {recipeNames && recipeNames.length > 0 && (
-          <div>
-            {recipeNames.map((recipeName) => (
-              <div>
-                {recipeName}
-              </div>
-            ))}
-          </div>
-        )}
+        <div>
+          {recipeNames.map((recipeName, index) => (
+            <Button
+              key={index}
+              variant="outlined"
+              color="primary"
+              style={{ 
+                textTransform: 'none', 
+                width: '100%',
+                marginTop: '10px',
+              }}
+            >
+              {recipeName}
+            </Button>
+          ))}
+        </div>
+      <div
+        style={{
+          flexGrow: 1,
+        }}
+      />
+      <Button
+        variant="contained"
+        sx={{ textTransform: "none", marginTop: '10px' }}
+        disabled
+      >
+        Make New Recipes
+      </Button>
+      <Button
+        variant="contained"
+        sx={{ textTransform: "none", marginTop: '10px' }}
+        onClick={handleBack}
+      >
+        Back
+      </Button>
       </Container>
     </div>
   );
