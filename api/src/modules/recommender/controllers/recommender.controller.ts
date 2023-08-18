@@ -52,4 +52,16 @@ export class RecommenderController {
 
     return response as unknown as string;
   }
+
+  @UseGuards(UserGuard)
+  @Get('/request-recipe-names')
+  public async requestRecipeNames(): Promise<{ recipeNames: string[] }> {
+    this.logger.log('Requesting recipe names');
+
+    const response = await this.recommenderService.requestRecipeNames();
+
+    return {
+      recipeNames: response,
+    };
+  }
 }

@@ -23,6 +23,20 @@ export class RecommenderService {
     private readonly dietaryRestrictionService: DietaryRestrictionService,
   ) {}
 
+  public async requestRecipeNames(): Promise<string[]> {
+    const userId = await this.userContextService.userId;
+    const dietaryRestrictions =
+      await this.dietaryRestrictionService.getUserDietaryRestrictionNames(
+        userId,
+      );
+
+    const recipeNames = await this.openaiService.requestRecipeNames({
+      dietaryRestrictions,
+    });
+
+    return recipeNames;
+  }
+
   public async suggestNextMeal(): Promise<OpenAIMeal> {
     const userId = await this.userContextService.userId;
 

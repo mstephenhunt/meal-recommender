@@ -4,6 +4,7 @@ import MainMenuPage from './components/MainMenu/MainMenuPage';
 import Login from './components/Login/Login';
 import DietaryRestrictionsPage from './components/DietaryRestrictions/DietaryRestrictionsPage';
 import { AuthService } from './components/Login/auth.service';
+import RecipeSuggestor from './components/RecipeSuggestor/RecipeSuggestor';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,6 +31,10 @@ export default function App() {
       <Route
         path="/dietary-restrictions"
         element={<DietaryRestrictionsPage setIsLoggedIn={setIsLoggedIn} />}
+      />
+      <Route
+        path="/recipe-suggestor"
+        element={<RecipeSuggestor setIsLoggedIn={setIsLoggedIn} />}
       />
     </Routes>
   );
