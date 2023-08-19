@@ -8,10 +8,13 @@ import Box from "@mui/material/Box";
 import DietaryRestrictionItem from "./DietaryRestrictionItem";
 import { useNavigate } from "react-router-dom";
 import { DietaryRestrictionsService } from "./dietary-restrictions.service";
+import { AuthService } from "../Login/auth.service";
 
-export default function DietaryRestrictionsPage(props: { setIsLoggedIn: (isLoggedIn: boolean) => void }) {
-  const { setIsLoggedIn } = props;
-  
+type DietaryRestrictionsPageProps = {
+  authService: AuthService;
+};
+
+export default function DietaryRestrictionsPage(props: DietaryRestrictionsPageProps) {
   const [currentDietaryRestriction, setCurrentDietaryRestriction] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
 
@@ -66,7 +69,7 @@ export default function DietaryRestrictionsPage(props: { setIsLoggedIn: (isLogge
       }}
     >
       <MenuBar 
-        setIsLoggedIn={setIsLoggedIn}
+        authService={props.authService}
       />
       <Container
         maxWidth="xs"

@@ -5,13 +5,14 @@ import Login from './components/Login/Login';
 import DietaryRestrictionsPage from './components/DietaryRestrictions/DietaryRestrictionsPage';
 import { AuthService } from './components/Login/auth.service';
 import RecipeSuggestor from './components/RecipeSuggestor/RecipeSuggestor';
+import Recipe from './components/Recipe/Recipe';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const authService = useMemo(() => new AuthService(setIsLoggedIn), []);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (authService.isLoggedIn()) {
       authService.scheduleTokenRefresh();
     } else {
       authService.cancelTokenRefresh();
@@ -22,31 +23,35 @@ export default function App() {
     <Routes>
       <Route
         path="/"
-        element={<Login authService={authService} setIsLoggedIn={setIsLoggedIn} />}
+        element={<Login authService={authService} />}
       />
       <Route
         path="/home"
-        element={<MainMenuPage setIsLoggedIn={setIsLoggedIn} />}
+        element={<MainMenuPage authService={authService} />}
       />
       <Route
         path="/dietary-restrictions"
-        element={<DietaryRestrictionsPage setIsLoggedIn={setIsLoggedIn} />}
+        element={<DietaryRestrictionsPage authService={authService} />}
       />
       <Route
         path="/recipe-suggestor"
-        element={<RecipeSuggestor setIsLoggedIn={setIsLoggedIn} />}
+        element={<RecipeSuggestor authService={authService} />}
+      />
+      <Route
+        path="/recipe"
+        element={<Recipe authService={authService} />}
       />
     </Routes>
   );
 
   return (
     <Router>
-      {isLoggedIn ? (
+      {authService.isLoggedIn() ? (
         // If logged in, show the routes
         routes
       ) : (
         // If not logged in, redirect to the login page
-        <Login authService={authService} setIsLoggedIn={setIsLoggedIn} />
+        <Login authService={authService} />
       )}
     </Router>
   );

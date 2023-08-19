@@ -1,3 +1,5 @@
+import Cookie from "js-cookie";
+
 export class DietaryRestrictionsService {
   public static async saveDietaryRestriction(dietaryRestrictionName: string): Promise<void> {
     const baseUrl = process.env.REACT_APP_API_URL;
@@ -6,7 +8,7 @@ export class DietaryRestrictionsService {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("jwt")}`
+        "Authorization": `Bearer ${Cookie.get('jwt')}`
       },
       body: JSON.stringify({ dietaryRestrictionName }),
     });
@@ -19,7 +21,7 @@ export class DietaryRestrictionsService {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("jwt")}`
+        "Authorization": `Bearer ${Cookie.get('jwt')}`
       },
       body: JSON.stringify({ dietaryRestrictionName }),
     });
@@ -32,7 +34,7 @@ export class DietaryRestrictionsService {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("jwt")}`
+        "Authorization": `Bearer ${Cookie.get('jwt')}`
       },
     });
 

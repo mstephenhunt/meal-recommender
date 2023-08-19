@@ -5,15 +5,23 @@ import BotBase from '../BotBase/BotBase';
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { useNavigate } from 'react-router-dom';
+import { AuthService } from '../Login/auth.service';
 
-export default function RecipeSuggestor(props: { setIsLoggedIn: (isLoggedIn: boolean) => void }) {
-  const { setIsLoggedIn } = props;
+type RecipeSuggestorProps = {
+  authService: AuthService;
+};
+
+export default function RecipeSuggestor(props: RecipeSuggestorProps) {
   const navigate = useNavigate();
 
   const [recipeNames, setRecipeNames] = useState<string[]>([]);
   
   const handleBack = () => {
     navigate('/home');
+  };
+
+  const handleRecipeClick = (recipeName: string) => {
+    navigate(`/recipe?recipeName=${encodeURIComponent(recipeName)}`);
   };
 
   useEffect(() => {
@@ -29,7 +37,7 @@ export default function RecipeSuggestor(props: { setIsLoggedIn: (isLoggedIn: boo
   return (
     <div>
       <MenuBar 
-        setIsLoggedIn={setIsLoggedIn}
+        authService={props.authService}
       />
       <Container
         maxWidth="xs"
@@ -53,6 +61,7 @@ export default function RecipeSuggestor(props: { setIsLoggedIn: (isLoggedIn: boo
                 width: '100%',
                 marginTop: '10px',
               }}
+              onClick={() => handleRecipeClick(recipeName)}
             >
               {recipeName}
             </Button>

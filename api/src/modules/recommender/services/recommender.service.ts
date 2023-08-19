@@ -62,6 +62,25 @@ export class RecommenderService {
   public async requestRecipe(input: {
     recipeName: string;
   }): Promise<OpenAIMeal> {
+    // Double-check, does this recipe already exist?
+    const existingRecipe = await this.recipeService.getRecipe(input.recipeName);
+
+    if (existingRecipe) {
+      this.logger.log('Recipe already exists', {
+        recipeName: input.recipeName,
+      });
+
+      return {
+        name: existingRecipe.name,
+        instructions: existingRecipe.instructions,
+        ingredients: existingRecipe.recipeIngredients.map((ingredient) => ({
+          name: ingredient.ingredient.name,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+        })),
+      };
+    }
+
     const recipe = await this.openaiService.requestRecipe(input);
 
     const recipeInput: RecipeInput = {
