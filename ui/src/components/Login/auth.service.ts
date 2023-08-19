@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 export class AuthService {
   private refreshTimeout: NodeJS.Timeout | null = null;
   private setLoginState: (loggedIn: boolean) => void;
@@ -9,6 +11,16 @@ export class AuthService {
     // setTimeout and clearTimeout
     this.refreshToken = this.refreshToken.bind(this);
     this.setJwt = this.setJwt.bind(this);
+    this.cancelTokenRefresh = this.cancelTokenRefresh.bind(this);
+  }
+
+  public isLoggedIn(): boolean {
+    return !!Cookies.get('jwt');
+  }
+
+  public logOut(): void {
+    Cookies.remove('jwt');
+    this.setLoginState(false);
   }
 
   public async refreshToken(): Promise<void>{
@@ -20,7 +32,7 @@ export class AuthService {
       const response = await fetch(`${baseUrl}/auth/refresh`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: localStorage.getItem("jwt") }),
+        body: JSON.stringify({ token: Cookies.get('jwt') }),
       });
 
       await this.setJwt(response);
@@ -42,13 +54,19 @@ export class AuthService {
     if (statusCode === 201) {
       // If the login was successful, save the JWT from the response into local storage
       const { jwt } = responseBody;
-      localStorage.setItem("jwt", jwt);
+      Cookies.set('jwt', jwt, { expires: 7 });
+      this.setLoginState(true);
     } else {
       throw new Error("An unknown error occurred. Please try again.");
     }
   }
 
   public scheduleTokenRefresh(): void {
+    // If the timeout is already set, don't set it again
+    if (this.refreshTimeout) {
+      return
+    }
+
     const refreshInterval = 60000; // 1 minute
 
     // Set the token refresh timeout
@@ -59,8 +77,6 @@ export class AuthService {
   };
 
   public cancelTokenRefresh(): void {
-    localStorage.removeItem("jwt");
-
     if (this.refreshTimeout) {
       clearTimeout(this.refreshTimeout);
     }

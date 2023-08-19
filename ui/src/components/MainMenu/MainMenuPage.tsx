@@ -4,9 +4,14 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import MenuBar from '../MenuBar/MenuBar';
 import { useNavigate } from 'react-router-dom';
+import { AuthService } from "../Login/auth.service";
 
-export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolean) => void }) {
-  const { setIsLoggedIn } = props;
+type MainMenuPageProps = {
+  authService: AuthService;
+};
+
+export default function MainMenuPage(props: MainMenuPageProps) {
+  const { authService } = props;
   const navigate = useNavigate();
 
   const handleAddDietaryRestrictions = () => {
@@ -20,7 +25,7 @@ export default function MainMenuPage(props: { setIsLoggedIn: (isLoggedIn: boolea
   return (
     <div>
       <MenuBar 
-        setIsLoggedIn={setIsLoggedIn}
+        authService={authService}
       />
       <Container
         maxWidth="xs"

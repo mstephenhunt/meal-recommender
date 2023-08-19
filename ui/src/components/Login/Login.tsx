@@ -9,13 +9,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "./auth.service";
 
-export default function Login(props: { authService: AuthService, setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>}) {
+export default function Login(props: { authService: AuthService }) {
   const [username, setUsername] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [loginErrors, setLoginErrors] = useState<string[]>([]);
   const navigate = useNavigate();
 
-  const { authService, setIsLoggedIn } = props;
+  const { authService } = props;
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -38,8 +38,6 @@ export default function Login(props: { authService: AuthService, setIsLoggedIn: 
 
     try {
       await authService.setJwt(response);
-
-      setIsLoggedIn(true);
 
       navigate("/home");
     } catch(error) {
