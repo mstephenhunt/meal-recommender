@@ -89,4 +89,54 @@ export class RecipeService {
 
     return recipes.map((recipe) => recipe.name);
   }
+
+  public async getRecipe(name: string): Promise<Recipe | null> {
+    const recipe = await this.prisma.recipe.findUnique({
+      where: {
+        name: name,
+      },
+    });
+
+    if (!recipe) {
+      return null;
+    }
+
+    const ingredients = await this.prisma.$queryRaw<
+      {
+        ingredientId: number;
+        name: string;
+        recipeIngredientId: number;
+        quantity: number;
+        unit: string;
+      }[]
+    >(Prisma.sql`
+      SELECT
+        i.id as "ingredientId",
+        i.name,
+        ri.id as "recipeIngredientId",
+        ri.quantity,
+        ri.unit
+      FROM
+        public.recipe_ingredients ri
+        JOIN public.ingredients i on i.id = ri."ingredientId"
+      WHERE
+        ri."recipeId" = ${recipe.id};
+    `);
+
+    return {
+      id: recipe.id,
+      name: recipe.name,
+      instructions: recipe.instructions,
+      recipeIngredients: ingredients.map((ingredient) => ({
+        id: ingredient.recipeIngredientId,
+        recipeId: recipe.id,
+        ingredient: {
+          id: ingredient.ingredientId,
+          name: ingredient.name,
+        },
+        quantity: ingredient.quantity,
+        unit: ingredient.unit,
+      })),
+    };
+  }
 }
