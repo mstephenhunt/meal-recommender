@@ -39,17 +39,26 @@ export class RecipeService {
       // Create the recipe ingredients individually. This is because Prisma doens't
       // return the created model or id when using createMany
       const savedRecipeIngredients = await Promise.all(
-        savedIngredients.map((ingredient, index) =>
-          prisma.recipeIngredient.create({
+        savedIngredients.map((ingredient, index) => {
+          // @TODO: This hack should be put into a lower layer
+          const formattedQuantity =
+            typeof recipe.recipeIngredients[index].quantity === 'string'
+              ? parseInt(
+                  recipe.recipeIngredients[index].quantity as unknown as string,
+                )
+              : recipe.recipeIngredients[index].quantity;
+
+          return prisma.recipeIngredient.create({
             data: {
               ingredientId: ingredient.id,
               recipeId: savedRecipe.id,
-              quantity: recipe.recipeIngredients[index].quantity,
+              quantity: formattedQuantity,
+              // quantity: recipe.recipeIngredients[index].quantity,
               // This is defaulting to 'count' because sometimes the unit is undefined
               unit: recipe.recipeIngredients[index].unit || 'count',
             },
-          }),
-        ),
+          });
+        }),
       );
 
       // Finally, return the recipe
