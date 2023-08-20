@@ -3,7 +3,7 @@ import { UserPreferencesService } from '../services/user-preferences.service';
 import { UserGuard } from '../../auth/guards/user.guard';
 import { UserPreferenceEntity } from '../entities/user-preference.entity';
 
-@Controller('user-preferences')
+@Controller('api/user-preferences')
 @UseGuards(UserGuard)
 export class UserPreferencesController {
   constructor(
