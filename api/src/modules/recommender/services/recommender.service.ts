@@ -90,7 +90,7 @@ export class RecommenderService {
         ingredient: {
           name: ingredient.name,
         },
-        quantity: ingredient.quantity,
+        quantity: ingredient.quantity || 0,
         unit: ingredient.unit,
       })),
     };
