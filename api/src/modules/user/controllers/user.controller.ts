@@ -2,7 +2,7 @@ import { Injectable, Controller, Post, Body } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 
 @Injectable()
-@Controller('user')
+@Controller('api/user')
 export class UserController {
   constructor(public readonly userService: UserService) {}
 

@@ -4,7 +4,7 @@ import { Logger } from 'nestjs-pino';
 import { UserGuard } from '../../auth/guards/user.guard';
 import { Recipe } from '../entities/recipe.entity';
 
-@Controller('recommender')
+@Controller('api/recommender')
 @UseGuards(UserGuard)
 export class RecommenderController {
   constructor(
