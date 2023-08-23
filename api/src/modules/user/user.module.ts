@@ -8,9 +8,16 @@ import { UserPreferencesController } from './controllers/user-preferences.contro
 import { ConfigModule } from '@nestjs/config';
 import { UserPreferencesService } from './services/user-preferences.service';
 import { RecipeModule } from '../recipe/recipe.module';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
-  imports: [AuthModule, DbModule, ConfigModule.forRoot(), RecipeModule],
+  imports: [
+    AuthModule,
+    DbModule,
+    ConfigModule.forRoot(),
+    RecipeModule,
+    LoggerModule.forRoot(),
+  ],
   controllers: [UserController, UserPreferencesController],
   providers: [
     UserService,

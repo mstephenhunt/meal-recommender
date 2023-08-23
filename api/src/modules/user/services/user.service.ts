@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../../auth/services/auth.service';
 import { PrismaService } from '../../db/services/prisma.service';
+import { ConfigService } from '@nestjs/config';
+import { Logger } from 'nestjs-pino';
 
 type User = {
   email: string;
@@ -12,6 +14,8 @@ export class UserService {
   constructor(
     private readonly authService: AuthService,
     private readonly prisma: PrismaService,
+    private readonly configService: ConfigService,
+    private readonly logger: Logger,
   ) {}
 
   public async logIn(input: {
@@ -50,7 +54,18 @@ export class UserService {
   public async createUser(input: {
     email: string;
     password: string;
+    signupCode: string;
   }): Promise<User> {
+    const signupCode = this.configService.get<string>('SIGNUP_CODE');
+
+    if (input.signupCode !== signupCode) {
+      this.logger.error('Invalid signup code', {
+        signupCode,
+      });
+
+      throw new Error('Invalid signup code');
+    }
+
     const hashedPass = await this.authService.hashPassword(input.password);
 
     const user = await this.prisma.user.create({
