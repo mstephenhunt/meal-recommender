@@ -23,8 +23,26 @@ export class AuthService {
     this.setLoginState(false);
   }
 
-  public async refreshToken(): Promise<void>{
+  public async logIn(input: { username: string, password: string }): Promise<void> {
+    const { username, password } = input;
+    const baseUrl = process.env.REACT_APP_API_URL;
+
+    const response = await fetch(`${baseUrl}/user/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: username, password }),
+    });
+
+    await this.setJwt(response);
+
+    // From login, schedule token refresh
+    await this.scheduleTokenRefresh();
+    this.setLoginState(true);
+  }
+
+  private async refreshToken(): Promise<void>{
     clearTimeout(this.refreshTimeout!);
+    this.refreshTimeout = null;
 
     try {
       const baseUrl = process.env.REACT_APP_API_URL;
@@ -47,7 +65,7 @@ export class AuthService {
     }
   }
 
-  public async setJwt(response: Response): Promise<void> {
+  private async setJwt(response: Response): Promise<void> {
     const statusCode = response.status;
     const responseBody = await response.json();
 
@@ -61,7 +79,7 @@ export class AuthService {
     }
   }
 
-  public scheduleTokenRefresh(): void {
+  private scheduleTokenRefresh(): void {
     // If the timeout is already set, don't set it again
     if (this.refreshTimeout) {
       return
@@ -76,7 +94,7 @@ export class AuthService {
     this.refreshTimeout = refreshTimeout;
   };
 
-  public cancelTokenRefresh(): void {
+  private cancelTokenRefresh(): void {
     if (this.refreshTimeout) {
       clearTimeout(this.refreshTimeout);
     }

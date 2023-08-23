@@ -12,10 +12,8 @@ export default function App() {
   const authService = useMemo(() => new AuthService(setIsLoggedIn), []);
 
   useEffect(() => {
-    if (authService.isLoggedIn()) {
-      authService.scheduleTokenRefresh();
-    } else {
-      authService.cancelTokenRefresh();
+    if (!authService.isLoggedIn()) {
+      authService.logOut();
     }
   }, [isLoggedIn, authService]);
 

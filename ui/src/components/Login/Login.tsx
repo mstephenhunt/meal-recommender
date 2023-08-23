@@ -8,11 +8,13 @@ import Link from "@mui/material/Link";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "./auth.service";
+import Signup from "./Signup";
 
 export default function Login(props: { authService: AuthService }) {
   const [username, setUsername] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [loginErrors, setLoginErrors] = useState<string[]>([]);
+  const [isSignupOpen, setIsSignupOpen] = useState(false); // State to control the modal
   const navigate = useNavigate();
 
   const { authService } = props;
@@ -28,16 +30,11 @@ export default function Login(props: { authService: AuthService }) {
   const handleSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
-    const baseUrl = process.env.REACT_APP_API_URL;
-
-    const response = await fetch(`${baseUrl}/user/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: username, password }),
-    });
-
     try {
-      await authService.setJwt(response);
+      await authService.logIn({
+        username: username!,
+        password: password!,
+      });
 
       navigate("/home");
     } catch(error) {
@@ -115,9 +112,17 @@ export default function Login(props: { authService: AuthService }) {
             ))}
           </Box>
         )}
-        <Link href="#" sx={{ textAlign: "right", width: "100%" }}>
-          {"No account? Sign Up"}
-        </Link>
+      <Link
+        href="#"
+        sx={{ textAlign: "right", width: "100%" }}
+        onClick={() => setIsSignupOpen(true)} // Open the modal when the link is clicked
+      >
+        {"No account? Sign Up"}
+      </Link>
+      <Signup
+        isSignupOpen={isSignupOpen}
+        setIsSignupOpen={setIsSignupOpen}
+      />
       </Box>
     </Container>
   );
