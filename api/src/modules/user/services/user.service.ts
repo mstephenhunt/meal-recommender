@@ -3,11 +3,18 @@ import { AuthService } from '../../auth/services/auth.service';
 import { PrismaService } from '../../db/services/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from 'nestjs-pino';
+import Joi from 'joi';
 
 type User = {
   email: string;
   jwt?: string;
 };
+
+const userSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+  signupCode: Joi.string().required(),
+});
 
 @Injectable()
 export class UserService {
@@ -56,6 +63,16 @@ export class UserService {
     password: string;
     signupCode: string;
   }): Promise<User> {
+    const { error } = userSchema.validate(input);
+
+    if (error) {
+      this.logger.error('Invalid user input', {
+        error,
+      });
+
+      throw new Error('Invalid user input');
+    }
+
     const signupCode = this.configService
       .get<string>('SIGNUP_CODE')
       .toLowerCase();
