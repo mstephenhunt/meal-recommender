@@ -11,7 +11,7 @@ import { AuthService } from "./auth.service";
 import Signup from "./Signup";
 
 export default function Login(props: { authService: AuthService }) {
-  const [username, setUsername] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [loginErrors, setLoginErrors] = useState<string[]>([]);
   const [isSignupOpen, setIsSignupOpen] = useState(false); // State to control the modal
@@ -19,8 +19,8 @@ export default function Login(props: { authService: AuthService }) {
 
   const { authService } = props;
 
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +32,7 @@ export default function Login(props: { authService: AuthService }) {
 
     try {
       await authService.logIn({
-        username: username!,
+        email: email!,
         password: password!,
       });
 
@@ -74,11 +74,11 @@ export default function Login(props: { authService: AuthService }) {
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
+            id="email"
+            label="Email"
+            name="email"
             autoFocus
-            onChange={handleUsernameChange}
+            onChange={handleEmailChange}
           />
           <TextField
             margin="normal"
@@ -122,6 +122,7 @@ export default function Login(props: { authService: AuthService }) {
       <Signup
         isSignupOpen={isSignupOpen}
         setIsSignupOpen={setIsSignupOpen}
+        authService={authService}
       />
       </Box>
     </Container>

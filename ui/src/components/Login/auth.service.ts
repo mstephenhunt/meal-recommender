@@ -23,19 +23,40 @@ export class AuthService {
     this.setLoginState(false);
   }
 
-  public async logIn(input: { username: string, password: string }): Promise<void> {
-    const { username, password } = input;
+  public async logIn(input: { email: string, password: string }): Promise<void> {
+    const { email, password } = input;
     const baseUrl = process.env.REACT_APP_API_URL;
 
     const response = await fetch(`${baseUrl}/user/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: username, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     await this.setJwt(response);
 
     // From login, schedule token refresh
+    await this.scheduleTokenRefresh();
+    this.setLoginState(true);
+  }
+
+  public async signUp(input: {
+    email: string,
+    password: string,
+    signupCode: string,
+  }): Promise<void> {
+    const { email, password, signupCode } = input;
+    const baseUrl = process.env.REACT_APP_API_URL;
+
+    const response = await fetch(`${baseUrl}/user`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, signupCode }),
+    });
+
+    await this.setJwt(response);
+
+    // From signup, schedule token refresh
     await this.scheduleTokenRefresh();
     this.setLoginState(true);
   }
