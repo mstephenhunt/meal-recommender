@@ -25,7 +25,7 @@ export class UserService {
     // Does this user exist?
     const user = await this.prisma.user.findUnique({
       where: {
-        email: input.email,
+        email: input.email.toLowerCase(),
       },
     });
 
@@ -56,9 +56,11 @@ export class UserService {
     password: string;
     signupCode: string;
   }): Promise<User> {
-    const signupCode = this.configService.get<string>('SIGNUP_CODE');
+    const signupCode = this.configService
+      .get<string>('SIGNUP_CODE')
+      .toLowerCase();
 
-    if (input.signupCode !== signupCode) {
+    if (input.signupCode.toLowerCase() !== signupCode) {
       this.logger.error('Invalid signup code', {
         signupCode,
       });
@@ -70,7 +72,7 @@ export class UserService {
 
     const user = await this.prisma.user.create({
       data: {
-        email: input.email,
+        email: input.email.toLowerCase(),
         password: hashedPass,
       },
     });
