@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../../auth/services/auth.service';
 import { PrismaService } from '../../db/services/prisma.service';
+import { ConfigService } from '@nestjs/config';
+import { Logger } from 'nestjs-pino';
+import * as Joi from 'joi';
 
 type User = {
   email: string;
@@ -12,6 +15,8 @@ export class UserService {
   constructor(
     private readonly authService: AuthService,
     private readonly prisma: PrismaService,
+    private readonly configService: ConfigService,
+    private readonly logger: Logger,
   ) {}
 
   public async logIn(input: {
@@ -21,7 +26,7 @@ export class UserService {
     // Does this user exist?
     const user = await this.prisma.user.findUnique({
       where: {
-        email: input.email,
+        email: input.email.toLowerCase(),
       },
     });
 
@@ -50,12 +55,41 @@ export class UserService {
   public async createUser(input: {
     email: string;
     password: string;
+    signupCode: string;
   }): Promise<User> {
+    const userSchema = Joi.object({
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+      signupCode: Joi.string().required(),
+    });
+
+    const { error } = userSchema.validate(input);
+
+    if (error) {
+      this.logger.error('Invalid user input', {
+        error,
+      });
+
+      throw new Error('Invalid user input');
+    }
+
+    const signupCode = this.configService
+      .get<string>('SIGNUP_CODE')
+      .toLowerCase();
+
+    if (input.signupCode.toLowerCase() !== signupCode) {
+      this.logger.error('Invalid signup code', {
+        signupCode,
+      });
+
+      throw new Error('Invalid signup code');
+    }
+
     const hashedPass = await this.authService.hashPassword(input.password);
 
     const user = await this.prisma.user.create({
       data: {
-        email: input.email,
+        email: input.email.toLowerCase(),
         password: hashedPass,
       },
     });
