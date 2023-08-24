@@ -161,17 +161,38 @@ export class RecipeService {
   }
 
   private async getCachedRecipe(name: string): Promise<Recipe | null> {
-    // @TODO: this doesn't make sense anymore. Reicpes are no longer unique
-    // per name
-    const recipe = await this.prisma.recipe.findFirst({
-      where: {
-        name: name,
-      },
-    });
+    const userId = await this.userContextService.userId;
 
-    if (!recipe) {
+    const userRecipe = await this.prisma.$queryRaw<
+      {
+        recipe_id: number;
+        name: string;
+        instructions: string;
+      }[]
+    >(
+      Prisma.sql`
+        SELECT 
+          r.id AS recipe_id,
+          r.name,
+          r.instructions
+        FROM user_recipes ur
+        JOIN recipes r ON ur."recipeId" = r.id
+        WHERE ur."userId" = ${userId}
+          AND r.name = ${name};
+        
+        )
+      `,
+    );
+
+    if (userRecipe.length !== 1) {
       return null;
     }
+
+    const recipe = {
+      id: userRecipe[0].recipe_id,
+      name: userRecipe[0].name,
+      instructions: userRecipe[0].instructions,
+    };
 
     const ingredients = await this.prisma.$queryRaw<
       {
