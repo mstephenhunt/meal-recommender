@@ -6,6 +6,8 @@ import { DietaryRestrictionModule } from '../dietary-restriction/dietary-restric
 import { OpenaiModule } from '../openai/openai.module';
 import { UserModule } from '../user/user.module';
 import { LoggerModule } from 'nestjs-pino';
+import { RecipeController } from './controllers/recipe.controller';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -14,7 +16,9 @@ import { LoggerModule } from 'nestjs-pino';
     UserModule,
     LoggerModule.forRoot(),
     DietaryRestrictionModule,
+    AuthModule,
   ],
+  controllers: [RecipeController],
   providers: [RecipeService, IngredientService],
 })
 export class RecipeModule {}

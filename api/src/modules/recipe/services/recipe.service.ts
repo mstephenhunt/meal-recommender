@@ -179,8 +179,6 @@ export class RecipeService {
         JOIN recipes r ON ur."recipeId" = r.id
         WHERE ur."userId" = ${userId}
           AND r.name = ${name};
-        
-        )
       `,
     );
 
