@@ -64,17 +64,6 @@ model RecipeDietaryRestriction {
   @@map("recipe_dietary_restrictions")
 }
 
-// Tracks who generated this actual recipe
-model RecipeUserGenerated {
-  id              Int             @id @default(autoincrement())
-  createdAt       DateTime        @default(now())                  @map("created_at")
-  updatedAt       DateTime        @updatedAt                       @map("updated_at")
-  recipeId        Int                                              @map("recipe_id")
-  userId          Int                                              @map("user_id")
-
-  @@map("recipe_user_generated")
-}
-
 model DietaryRestriction {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())                  @map("created_at")
