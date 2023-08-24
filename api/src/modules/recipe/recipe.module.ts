@@ -8,6 +8,7 @@ import { UserModule } from '../user/user.module';
 import { LoggerModule } from 'nestjs-pino';
 import { RecipeController } from './controllers/recipe.controller';
 import { AuthModule } from '../auth/auth.module';
+import { UserRecipeService } from './services/user-recipe.service';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { AuthModule } from '../auth/auth.module';
     AuthModule,
   ],
   controllers: [RecipeController],
-  providers: [RecipeService, IngredientService],
+  providers: [RecipeService, IngredientService, UserRecipeService],
 })
 export class RecipeModule {}

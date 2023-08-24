@@ -36,4 +36,15 @@ export class RecipeController {
 
     return new RecipeEntity(recipe);
   }
+
+  @Get('/user-created-recipes')
+  public async getUserCreatedRecipeNames(): Promise<{
+    recipes: RecipeEntity[];
+  }> {
+    const recipes = await this.recipeService.getUserSavedRecipes();
+
+    return {
+      recipes: recipes.map((recipe) => new RecipeEntity(recipe)),
+    };
+  }
 }

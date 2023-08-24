@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../db/services/prisma.service';
 import { Ingredient, Recipe, RecipeInput } from '../types';
 import { IngredientService } from './ingredient.service';
-import { Prisma } from '@prisma/client';
 import { Logger } from 'nestjs-pino';
 import { OpenaiService } from '../../openai/services/openai.service';
 import { UserService } from '../../user/services/user.service';
 import { UserContextService } from '../../user/services/user-context.service';
 import { DietaryRestrictionService } from '../../dietary-restriction/services/dietary-restriction.service';
+import { UserRecipeService } from './user-recipe.service';
 
 @Injectable()
 export class RecipeService {
@@ -19,6 +19,7 @@ export class RecipeService {
     private readonly userService: UserService,
     private readonly userContextService: UserContextService,
     private readonly dietaryRestrictionService: DietaryRestrictionService,
+    private readonly userRecipeService: UserRecipeService,
   ) {}
 
   public async requestRecipeNames(): Promise<string[]> {
@@ -39,7 +40,8 @@ export class RecipeService {
 
   public async requestRecipe(input: { recipeName: string }): Promise<Recipe> {
     // Double-check, does this recipe already exist?
-    const existingRecipe = await this.getCachedRecipe(input.recipeName);
+    const existingRecipe =
+      await this.userRecipeService.getUserCachedRecipeByName(input.recipeName);
 
     if (existingRecipe) {
       this.logger.log('Recipe already exists', {
@@ -87,6 +89,10 @@ export class RecipeService {
         },
       })),
     };
+  }
+
+  public async getUserSavedRecipes(): Promise<Recipe[]> {
+    return this.userRecipeService.getUserSavedRecipes();
   }
 
   private async saveRecipe(recipe: RecipeInput): Promise<Recipe> {
@@ -158,75 +164,5 @@ export class RecipeService {
     } else {
       throw new Error('Failed to save recipe');
     }
-  }
-
-  private async getCachedRecipe(name: string): Promise<Recipe | null> {
-    const userId = await this.userContextService.userId;
-
-    const userRecipe = await this.prisma.$queryRaw<
-      {
-        recipe_id: number;
-        name: string;
-        instructions: string;
-      }[]
-    >(
-      Prisma.sql`
-        SELECT 
-          r.id AS recipe_id,
-          r.name,
-          r.instructions
-        FROM user_recipes ur
-        JOIN recipes r ON ur."recipeId" = r.id
-        WHERE ur."userId" = ${userId}
-          AND r.name = ${name};
-      `,
-    );
-
-    if (userRecipe.length !== 1) {
-      return null;
-    }
-
-    const recipe = {
-      id: userRecipe[0].recipe_id,
-      name: userRecipe[0].name,
-      instructions: userRecipe[0].instructions,
-    };
-
-    const ingredients = await this.prisma.$queryRaw<
-      {
-        ingredientId: number;
-        name: string;
-        recipeIngredientId: number;
-        quantity: number;
-        unit: string;
-      }[]
-    >(Prisma.sql`
-      SELECT
-        i.id as "ingredientId",
-        i.name,
-        ri.id as "recipeIngredientId",
-        ri.quantity,
-        ri.unit
-      FROM
-        public.recipe_ingredients ri
-        JOIN public.ingredients i on i.id = ri."ingredientId"
-      WHERE
-        ri."recipeId" = ${recipe.id};
-    `);
-
-    return {
-      id: recipe.id,
-      name: recipe.name,
-      instructions: recipe.instructions,
-      recipeIngredients: ingredients.map((ingredient) => ({
-        id: ingredient.recipeIngredientId,
-        ingredient: {
-          id: ingredient.ingredientId,
-          name: ingredient.name,
-        },
-        quantity: ingredient.quantity,
-        unit: ingredient.unit,
-      })),
-    };
   }
 }
