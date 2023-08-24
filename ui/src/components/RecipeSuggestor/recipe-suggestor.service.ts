@@ -6,7 +6,7 @@ export class RecipeSuggestorService {
 
     console.log('Loading...')
 
-    const response = await fetch(`${baseUrl}/recommender/request-recipe-names`, {
+    const response = await fetch(`${baseUrl}/recipe/request-recipe-names`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

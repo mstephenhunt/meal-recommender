@@ -4,7 +4,7 @@ import {
   PrismaService,
   titleCaseString,
 } from '../../db/services/prisma.service';
-import { DietaryRestrictionService } from '../../recipe/services/dietary-restriction.service';
+import { DietaryRestrictionService } from '../../dietary-restriction/services/dietary-restriction.service';
 import { UserContextService } from './user-context.service';
 import { Prisma } from '@prisma/client';
 

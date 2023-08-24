@@ -9,7 +9,6 @@ export type IngredientInput = {
 
 export type RecipeIngredient = {
   id: number;
-  recipeId: number;
   ingredient: Ingredient;
   quantity: number;
   unit: string;

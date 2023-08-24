@@ -3,7 +3,6 @@ import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { RecipeModule } from './modules/recipe/recipe.module';
 import { ConfigModule } from '@nestjs/config';
-import { RecommenderModule } from './modules/recommender/recommender.module';
 import { LoggerModule } from 'nestjs-pino';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -27,7 +26,6 @@ import { v4 as uuidv4 } from 'uuid';
     UserModule,
     RecipeModule,
     ConfigModule.forRoot(),
-    RecommenderModule,
   ],
   providers: [AppService],
 })

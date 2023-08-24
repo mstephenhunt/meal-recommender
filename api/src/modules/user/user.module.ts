@@ -7,16 +7,16 @@ import { UserContextService } from './services/user-context.service';
 import { UserPreferencesController } from './controllers/user-preferences.controller';
 import { ConfigModule } from '@nestjs/config';
 import { UserPreferencesService } from './services/user-preferences.service';
-import { RecipeModule } from '../recipe/recipe.module';
 import { LoggerModule } from 'nestjs-pino';
+import { DietaryRestrictionModule } from '../dietary-restriction/dietary-restriction.module';
 
 @Module({
   imports: [
     AuthModule,
     DbModule,
     ConfigModule.forRoot(),
-    RecipeModule,
     LoggerModule.forRoot(),
+    DietaryRestrictionModule,
   ],
   controllers: [UserController, UserPreferencesController],
   providers: [

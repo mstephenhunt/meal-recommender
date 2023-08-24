@@ -71,15 +71,14 @@ export class DietaryRestrictionService {
     };
   }
 
-  public async getUserDietaryRestrictionNames(
+  public getUserDietaryRestrictions(
     userId: number,
-  ): Promise<string[]> {
-    const dietaryRestrictions = await this.prisma.$queryRaw<
-      { display_name: string }[]
-    >(
+  ): Promise<DietaryRestriction[]> {
+    return this.prisma.$queryRaw<DietaryRestriction[]>(
       Prisma.sql`
         SELECT
-          dr.display_name
+          dr.id,
+          dr.display_name as name
         FROM
           public.users u
           JOIN users_dietary_restrictions udr ON udr.user_id = u.id
@@ -87,10 +86,6 @@ export class DietaryRestrictionService {
         WHERE
           u.id = ${userId};
     `,
-    );
-
-    return dietaryRestrictions.map(
-      (dietaryRestriction) => dietaryRestriction.display_name,
     );
   }
 }

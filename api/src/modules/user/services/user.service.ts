@@ -4,6 +4,7 @@ import { PrismaService } from '../../db/services/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from 'nestjs-pino';
 import * as Joi from 'joi';
+import { UserContextService } from './user-context.service';
 
 type User = {
   email: string;
@@ -14,9 +15,10 @@ type User = {
 export class UserService {
   constructor(
     private readonly authService: AuthService,
-    private readonly prisma: PrismaService,
+    private readonly prismaService: PrismaService,
     private readonly configService: ConfigService,
     private readonly logger: Logger,
+    private readonly userContextService: UserContextService,
   ) {}
 
   public async logIn(input: {
@@ -24,7 +26,7 @@ export class UserService {
     password: string;
   }): Promise<User> {
     // Does this user exist?
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         email: input.email.toLowerCase(),
       },
@@ -87,7 +89,7 @@ export class UserService {
 
     const hashedPass = await this.authService.hashPassword(input.password);
 
-    const user = await this.prisma.user.create({
+    const user = await this.prismaService.user.create({
       data: {
         email: input.email.toLowerCase(),
         password: hashedPass,
@@ -98,5 +100,24 @@ export class UserService {
       email: input.email,
       jwt: this.authService.getJwt(user.id),
     };
+  }
+
+  public async associateRecipe(input: { recipeId: number }): Promise<void> {
+    // Associate this recipe to the current user
+    const { recipeId } = input;
+
+    const userId = await this.userContextService.userId;
+
+    this.logger.log('Associating recipe to user', {
+      userId,
+      recipeId,
+    });
+
+    await this.prismaService.userRecipe.create({
+      data: {
+        userId,
+        recipeId,
+      },
+    });
   }
 }

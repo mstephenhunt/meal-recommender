@@ -37,7 +37,7 @@ export default function Recipe(props: RecipeProps) {
     }
 
     getRecipe();
-  }, []);
+  }, [recipeName]);
 
   return (
     <div>
