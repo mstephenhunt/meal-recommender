@@ -17,6 +17,9 @@ model User {
   @@map("users")
 }
 
+// ----------------------------------------------------------------- //
+// Basic building blocks of a recipe
+// ----------------------------------------------------------------- //
 model Ingredient {
   id                Int                @id                              @default(autoincrement())
   createdAt         DateTime           @default(now())                  @map("created_at")
@@ -30,7 +33,7 @@ model Recipe {
   id              Int                   @id @default(autoincrement())
   createdAt         DateTime            @default(now())                  @map("created_at")
   updatedAt         DateTime            @updatedAt                       @map("updated_at")
-  name              String              @unique 
+  name              String               
   instructions      String
 
   @@map("recipes")
@@ -48,17 +51,43 @@ model RecipeIngredient {
   @@map("recipe_ingredients")
 }
 
-model UserRecipe {
+// ----------------------------------------------------------------- //
+// Recipe Metadata
+// ----------------------------------------------------------------- //
+model RecipeDietaryRestriction {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())                  @map("created_at")
   updatedAt       DateTime        @updatedAt                       @map("updated_at")
-  userId          Int
-  recipeId        Int
-  // To be expanded later to include notes, ratings, etc.
+  recipeId        Int                                              @map("recipe_id") 
+  dietaryRestrictionId  Int                                        @map("dietary_restriction_id")
 
-  @@map("user_recipes")
+  @@map("recipe_dietary_restrictions")
 }
 
+// Tracks who generated this actual recipe
+model RecipeUserGenerated {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  recipeId        Int                                              @map("recipe_id")
+  userId          Int                                              @map("user_id")
+
+  @@map("recipe_user_generated")
+}
+
+model DietaryRestriction {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  name            String          @unique
+  displayName     String          @map("display_name")
+
+  @@map("dietary_restrictions")
+}
+
+// ----------------------------------------------------------------- //
+// These models are used to cache requests made to external systems
+// ----------------------------------------------------------------- //
 model RequestCache {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())                  @map("created_at")
@@ -92,16 +121,9 @@ model RequestResponseCache {
   @@map("request_response_cache")
 }
 
-model DietaryRestriction {
-  id              Int             @id @default(autoincrement())
-  createdAt       DateTime        @default(now())                  @map("created_at")
-  updatedAt       DateTime        @updatedAt                       @map("updated_at")
-  name            String          @unique
-  displayName     String          @map("display_name")
-
-  @@map("dietary_restrictions")
-}
-
+// ----------------------------------------------------------------- //
+// Used to track dietary restrictions related to user preferences
+// ----------------------------------------------------------------- //
 model UsersDietaryResctrictions {
   id                    Int             @id @default(autoincrement())
   createdAt             DateTime        @default(now())                  @map("created_at")
@@ -110,4 +132,18 @@ model UsersDietaryResctrictions {
   dietaryRestrictionId  Int                                              @map("dietary_restriction_id")
 
   @@map("users_dietary_restrictions")
+}
+
+
+// ----------------------------------------------------------------- //
+// Associates users to recipes. Used for history and favorites.
+// ----------------------------------------------------------------- //
+model UserRecipe {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  userId          Int
+  recipeId        Int
+
+  @@map("user_recipes")
 }
