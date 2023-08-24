@@ -1,4 +1,4 @@
-import { Injectable, Controller, Post, Body } from '@nestjs/common';
+import { Injectable, Controller, Post, Body, Get } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { Logger } from 'nestjs-pino';
 
@@ -42,5 +42,13 @@ export class UserController {
       email: user.email,
       jwt: user.jwt,
     };
+  }
+
+  @Get('/recipe-history')
+  public async getRecipeHistory(): Promise<string[]> {
+    return [];
+    // const response = await this.userService.getRecipeHistory();
+
+    // return response as unknown as string[];
   }
 }

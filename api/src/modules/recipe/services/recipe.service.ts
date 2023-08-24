@@ -3,15 +3,93 @@ import { PrismaService } from '../../db/services/prisma.service';
 import { Ingredient, Recipe, RecipeInput } from '../types';
 import { IngredientService } from './ingredient.service';
 import { Prisma } from '@prisma/client';
+import { Logger } from 'nestjs-pino';
+import { OpenaiService } from '../../openai/services/openai.service';
+import { UserService } from '../../user/services/user.service';
+import { UserContextService } from '../../user/services/user-context.service';
+import { DietaryRestrictionService } from '../../dietary-restriction/services/dietary-restriction.service';
 
 @Injectable()
 export class RecipeService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly ingredientService: IngredientService,
+    private readonly logger: Logger,
+    private readonly openaiService: OpenaiService,
+    private readonly userService: UserService,
+    private readonly userContextService: UserContextService,
+    private readonly dietaryRestrictionService: DietaryRestrictionService,
   ) {}
 
-  public async saveRecipe(recipe: RecipeInput): Promise<Recipe> {
+  public async requestRecipeNames(): Promise<string[]> {
+    this.logger.log('Requesting recipe names');
+
+    const userId = await this.userContextService.userId;
+    const dietaryRestrictions =
+      await this.dietaryRestrictionService.getUserDietaryRestrictionNames(
+        userId,
+      );
+
+    const recipeNames = await this.openaiService.requestRecipeNames({
+      dietaryRestrictions,
+    });
+
+    return recipeNames;
+  }
+
+  public async requestRecipe(input: { recipeName: string }): Promise<Recipe> {
+    // Double-check, does this recipe already exist?
+    const existingRecipe = await this.getCachedRecipe(input.recipeName);
+
+    if (existingRecipe) {
+      this.logger.log('Recipe already exists', {
+        recipeName: input.recipeName,
+      });
+
+      return existingRecipe;
+    }
+
+    const recipe = await this.openaiService.requestRecipe(input);
+
+    const recipeInput: RecipeInput = {
+      name: recipe.name,
+      instructions: recipe.instructions,
+      recipeIngredients: recipe.ingredients.map((ingredient) => ({
+        ingredient: {
+          name: ingredient.name,
+        },
+        quantity: ingredient.quantity || 0,
+        unit: ingredient.unit,
+      })),
+    };
+
+    this.logger.log('Saving recipe', {
+      recipeInput,
+    });
+    const savedRecipe = await this.saveRecipe(recipeInput);
+
+    await this.userService.associateRecipe({
+      recipeId: savedRecipe.id,
+    });
+
+    this.logger.log('Completed recipe lookup');
+    return {
+      id: savedRecipe.id,
+      name: savedRecipe.name,
+      instructions: savedRecipe.instructions,
+      recipeIngredients: savedRecipe.recipeIngredients.map((ri) => ({
+        id: ri.id,
+        quantity: ri.quantity,
+        unit: ri.unit,
+        ingredient: {
+          id: ri.ingredient.id,
+          name: ri.ingredient.name,
+        },
+      })),
+    };
+  }
+
+  private async saveRecipe(recipe: RecipeInput): Promise<Recipe> {
     // First pluck the ingredients from the recipe
     const ingredients = recipe.recipeIngredients.map((ri) => ({
       name: ri.ingredient.name,
@@ -82,25 +160,10 @@ export class RecipeService {
     }
   }
 
-  public async getUserRecipeNames(userId: number): Promise<string[]> {
-    const recipes = await this.prisma.$queryRaw<{ name: string }[]>(
-      Prisma.sql`
-        SELECT
-          r.name
-        FROM
-          public.users u
-          JOIN public.user_recipes ur on ur."userId" = u.id
-          JOIN public.recipes r on r.id = ur."recipeId"
-        WHERE
-          u.id = ${userId};     
-      `,
-    );
-
-    return recipes.map((recipe) => recipe.name);
-  }
-
-  public async getRecipe(name: string): Promise<Recipe | null> {
-    const recipe = await this.prisma.recipe.findUnique({
+  private async getCachedRecipe(name: string): Promise<Recipe | null> {
+    // @TODO: this doesn't make sense anymore. Reicpes are no longer unique
+    // per name
+    const recipe = await this.prisma.recipe.findFirst({
       where: {
         name: name,
       },
@@ -138,7 +201,6 @@ export class RecipeService {
       instructions: recipe.instructions,
       recipeIngredients: ingredients.map((ingredient) => ({
         id: ingredient.recipeIngredientId,
-        recipeId: recipe.id,
         ingredient: {
           id: ingredient.ingredientId,
           name: ingredient.name,
