@@ -4,6 +4,7 @@ import MenuBar from '../MenuBar/MenuBar';
 import BotBase from '../BotBase/BotBase';
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from 'react-router-dom';
 import { AuthService } from '../Login/auth.service';
 
@@ -15,6 +16,7 @@ export default function RecipeSuggestor(props: RecipeSuggestorProps) {
   const navigate = useNavigate();
 
   const [recipeNames, setRecipeNames] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const handleBack = () => {
     navigate('/home');
@@ -26,9 +28,14 @@ export default function RecipeSuggestor(props: RecipeSuggestorProps) {
 
   useEffect(() => {
     async function getRecipeNames() {
-      const recipeNames = await RecipeSuggestorService.getRecipeNames();
+      try {
+        const recipeNames = await RecipeSuggestorService.getRecipeNames();
+        setRecipeNames(recipeNames);
+      } catch (error) {
+        console.error(error);
+      }
 
-      setRecipeNames(recipeNames);
+      setIsLoading(false);
     }
 
     getRecipeNames();
@@ -48,44 +55,48 @@ export default function RecipeSuggestor(props: RecipeSuggestorProps) {
         }}
       >
         <BotBase
-          speechText="Would you like to see any of these recipes?"
+          speechText={isLoading ? "🤔" : "Would you like to see any of these recipes?"}
         />
-        <div>
-          {recipeNames.map((recipeName, index) => (
-            <Button
-              key={index}
-              variant="outlined"
-              color="primary"
-              style={{ 
-                textTransform: 'none', 
-                width: '100%',
-                marginTop: '10px',
-              }}
-              onClick={() => handleRecipeClick(recipeName)}
-            >
-              {recipeName}
-            </Button>
-          ))}
-        </div>
-      <div
-        style={{
-          flexGrow: 1,
-        }}
-      />
-      <Button
-        variant="contained"
-        sx={{ textTransform: "none", marginTop: '10px' }}
-        disabled
-      >
-        Make New Recipes
-      </Button>
-      <Button
-        variant="contained"
-        sx={{ textTransform: "none", marginTop: '10px' }}
-        onClick={handleBack}
-      >
-        Back
-      </Button>
+        {isLoading ? ( // Conditionally render CircularProgress
+          <CircularProgress style={{ margin: '20px auto' }} />
+        ) : (
+          <div>
+            {recipeNames.map((recipeName, index) => (
+              <Button
+                key={index}
+                variant="outlined"
+                color="primary"
+                style={{ 
+                  textTransform: 'none', 
+                  width: '100%',
+                  marginTop: '10px',
+                }}
+                onClick={() => handleRecipeClick(recipeName)}
+              >
+                {recipeName}
+              </Button>
+            ))}
+          </div>
+        )}
+        <div
+          style={{
+            flexGrow: 1,
+          }}
+        />
+        <Button
+          variant="contained"
+          sx={{ textTransform: "none", marginTop: '10px' }}
+          disabled
+        >
+          Make New Recipes
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ textTransform: "none", marginTop: '10px' }}
+          onClick={handleBack}
+        >
+          Back
+        </Button>
       </Container>
     </div>
   );
