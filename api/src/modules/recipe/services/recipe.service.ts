@@ -27,12 +27,10 @@ export class RecipeService {
 
     const userId = await this.userContextService.userId;
     const dietaryRestrictions =
-      await this.dietaryRestrictionService.getUserDietaryRestrictionNames(
-        userId,
-      );
+      await this.dietaryRestrictionService.getUserDietaryRestrictions(userId);
 
     const recipeNames = await this.openaiService.requestRecipeNames({
-      dietaryRestrictions,
+      dietaryRestrictions: dietaryRestrictions.map((dr) => dr.name),
     });
 
     return recipeNames;
@@ -119,6 +117,23 @@ export class RecipeService {
           instructions: recipe.instructions,
         },
       });
+
+      // Get the dietary restrictions for this user
+      const userId = await this.userContextService.userId;
+      const dietaryRestrictions =
+        await this.dietaryRestrictionService.getUserDietaryRestrictions(userId);
+
+      // Associate the dietary restrictions to the recipe
+      await Promise.all(
+        dietaryRestrictions.map((dr) =>
+          prisma.recipeDietaryRestriction.create({
+            data: {
+              recipeId: savedRecipe.id,
+              dietaryRestrictionId: dr.id,
+            },
+          }),
+        ),
+      );
 
       // Create the recipe ingredients individually. This is because Prisma doens't
       // return the created model or id when using createMany
