@@ -1,3 +1,5 @@
+import { DietaryRestriction } from '../dietary-restriction/services/dietary-restriction.service';
+
 export type Ingredient = {
   id: number;
   name: string;
@@ -25,6 +27,7 @@ export type Recipe = {
   name: string;
   instructions: string;
   recipeIngredients: RecipeIngredient[];
+  dietaryRestrictions?: DietaryRestriction[];
 };
 
 export type RecipeInput = {
