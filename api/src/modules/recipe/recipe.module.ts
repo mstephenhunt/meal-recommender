@@ -15,7 +15,7 @@ import { UserRecipeService } from './services/user-recipe.service';
     DbModule,
     OpenaiModule,
     UserModule,
-    LoggerModule.forRoot(),
+    LoggerModule,
     DietaryRestrictionModule,
     AuthModule,
   ],

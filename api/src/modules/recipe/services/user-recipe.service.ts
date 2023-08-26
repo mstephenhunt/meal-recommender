@@ -136,6 +136,22 @@ export class UserRecipeService {
         ri."recipeId" = ${recipe.id};
     `);
 
+    const dietaryRestrictions = await this.prisma.$queryRaw<
+      {
+        id: number;
+        name: string;
+      }[]
+    >(Prisma.sql`
+      SELECT
+        dr.id,
+        dr.name
+      FROM
+        public.recipe_dietary_restrictions rdr
+        JOIN public.dietary_restrictions dr on dr.id = rdr.dietary_restriction_id
+      WHERE
+        rdr.recipe_id = ${recipe.id};
+    `);
+
     return {
       id: recipe.id,
       name: recipe.name,
@@ -148,6 +164,10 @@ export class UserRecipeService {
         },
         quantity: ingredient.quantity,
         unit: ingredient.unit,
+      })),
+      dietaryRestrictions: dietaryRestrictions.map((dr) => ({
+        id: dr.id,
+        name: dr.name,
       })),
     };
   }

@@ -10,7 +10,7 @@ type DietaryRestrictionInput = {
   name: string;
 };
 
-type DietaryRestriction = {
+export type DietaryRestriction = {
   id: number;
   name: string;
 };
