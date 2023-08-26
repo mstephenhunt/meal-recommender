@@ -15,7 +15,7 @@ import { DietaryRestrictionModule } from '../dietary-restriction/dietary-restric
     AuthModule,
     DbModule,
     ConfigModule.forRoot(),
-    LoggerModule.forRoot(),
+    LoggerModule,
     DietaryRestrictionModule,
   ],
   controllers: [UserController, UserPreferencesController],
