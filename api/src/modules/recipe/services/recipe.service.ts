@@ -73,20 +73,7 @@ export class RecipeService {
     });
 
     this.logger.log('Completed recipe lookup');
-    return {
-      id: savedRecipe.id,
-      name: savedRecipe.name,
-      instructions: savedRecipe.instructions,
-      recipeIngredients: savedRecipe.recipeIngredients.map((ri) => ({
-        id: ri.id,
-        quantity: ri.quantity,
-        unit: ri.unit,
-        ingredient: {
-          id: ri.ingredient.id,
-          name: ri.ingredient.name,
-        },
-      })),
-    };
+    return savedRecipe;
   }
 
   public async getUserSavedRecipes(): Promise<Recipe[]> {
@@ -171,6 +158,7 @@ export class RecipeService {
           unit: ri.unit,
           ingredient: savedIngredients.find((i) => i.id === ri.ingredientId),
         })),
+        dietaryRestrictions,
       };
     });
 
