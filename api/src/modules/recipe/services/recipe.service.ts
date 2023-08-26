@@ -142,7 +142,7 @@ export class RecipeService {
           // @TODO: This hack should be put into a lower layer
           const formattedQuantity =
             typeof recipe.recipeIngredients[index].quantity === 'string'
-              ? parseInt(
+              ? parseFloat(
                   recipe.recipeIngredients[index].quantity as unknown as string,
                 )
               : recipe.recipeIngredients[index].quantity;
