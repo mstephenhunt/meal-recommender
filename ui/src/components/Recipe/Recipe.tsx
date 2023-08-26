@@ -12,6 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import RecipeTitle from "./RecipeTitle";
 import RecipeIngredients  from "./RecipeIngredients";
+import RecipeInstructions from "./RecipeInstructions";
 
 type RecipeProps = {
   authService: AuthService;
@@ -72,23 +73,9 @@ export default function Recipe(props: RecipeProps) {
               <RecipeIngredients
                 ingredients={recipe.ingredients}
               />
-              <Typography variant="h5" component="h5" gutterBottom marginTop={'50px'}>
-                Instructions:
-              </Typography>
-              <Box
-                marginLeft={'30px'}
-                marginRight={'30px'}
-                marginBottom={'30px'}
-              >
-                <Typography variant="body1" component="p" gutterBottom>
-                  {recipe.instructions.split('\n').map((line, index) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-                </Typography>
-              </Box>
+              <RecipeInstructions
+                instructions={recipe.instructions}
+              />
             </Box>
           )
         )}
