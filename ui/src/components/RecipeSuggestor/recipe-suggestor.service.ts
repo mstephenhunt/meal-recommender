@@ -4,8 +4,6 @@ export class RecipeSuggestorService {
   public static async getRecipeNames(): Promise<string[]> {
     const baseUrl = process.env.REACT_APP_API_URL;
 
-    console.log('Loading...')
-
     const response = await fetch(`${baseUrl}/recipe/request-recipe-names`, {
       method: 'GET',
       headers: {

@@ -25,10 +25,11 @@ export class UserService {
     email: string;
     password: string;
   }): Promise<User> {
-    // Does this user exist?
+    const formattedEmail = input.email.toLowerCase();
+
     const user = await this.prismaService.user.findUnique({
       where: {
-        email: input.email.toLowerCase(),
+        email: formattedEmail,
       },
     });
 
@@ -45,7 +46,7 @@ export class UserService {
       });
 
       return {
-        email: input.email,
+        email: formattedEmail,
         jwt,
       };
     } catch (error) {
@@ -64,8 +65,8 @@ export class UserService {
       password: Joi.string().required(),
       signupCode: Joi.string().required(),
     });
-
     const { error } = userSchema.validate(input);
+    const formattedEmail = input.email.toLowerCase();
 
     if (error) {
       this.logger.error('Invalid user input', {
@@ -91,13 +92,13 @@ export class UserService {
 
     const user = await this.prismaService.user.create({
       data: {
-        email: input.email.toLowerCase(),
+        email: formattedEmail,
         password: hashedPass,
       },
     });
 
     return {
-      email: input.email,
+      email: formattedEmail,
       jwt: this.authService.getJwt(user.id),
     };
   }
