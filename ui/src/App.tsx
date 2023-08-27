@@ -27,8 +27,8 @@ export default function App() {
   /**
    * If we haven't checked the JWT yet, return null. This is to prevent the
    * Login component from being rendered before we've had a chance to check
-   * if the user is actually logged in or not. This occurs when the user refreshes
-   * the page.
+   * if the user is actually logged in or not. This occurs when the user
+   * refreshes the page.
    */
   if (!checkedJwt) {
     return null;
