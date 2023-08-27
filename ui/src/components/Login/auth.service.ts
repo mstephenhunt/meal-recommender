@@ -19,8 +19,6 @@ export class AuthService {
   }
 
   public logOut(): void {
-    console.log('hit log out')
-
     Cookies.remove('jwt');
     this.setLoginState(false);
   }
