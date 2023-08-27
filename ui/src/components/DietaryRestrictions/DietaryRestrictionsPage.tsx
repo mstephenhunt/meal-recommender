@@ -8,13 +8,8 @@ import Box from "@mui/material/Box";
 import DietaryRestrictionItem from "./DietaryRestrictionItem";
 import { useNavigate } from "react-router-dom";
 import { DietaryRestrictionsService } from "./dietary-restrictions.service";
-import { AuthService } from "../Login/auth.service";
 
-type DietaryRestrictionsPageProps = {
-  authService: AuthService;
-};
-
-export default function DietaryRestrictionsPage(props: DietaryRestrictionsPageProps) {
+export default function DietaryRestrictionsPage() {
   const [currentDietaryRestriction, setCurrentDietaryRestriction] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
 
@@ -68,9 +63,7 @@ export default function DietaryRestrictionsPage(props: DietaryRestrictionsPagePr
         flexDirection: "column",
       }}
     >
-      <MenuBar 
-        authService={props.authService}
-      />
+      <MenuBar />
       <Container
         maxWidth="xs"
         style={{

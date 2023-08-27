@@ -6,13 +6,8 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from 'react-router-dom';
-import { AuthService } from '../Login/auth.service';
 
-type RecipeSuggestorProps = {
-  authService: AuthService;
-};
-
-export default function RecipeSuggestor(props: RecipeSuggestorProps) {
+export default function RecipeSuggestor() {
   const navigate = useNavigate();
 
   const [recipeNames, setRecipeNames] = useState<string[]>([]);
@@ -43,9 +38,7 @@ export default function RecipeSuggestor(props: RecipeSuggestorProps) {
 
   return (
     <div>
-      <MenuBar 
-        authService={props.authService}
-      />
+      <MenuBar />
       <Container
         maxWidth="xs"
         style={{

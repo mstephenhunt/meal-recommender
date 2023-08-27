@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MenuBar from "../MenuBar/MenuBar";
 import BotBase from "../BotBase/BotBase";
-import { AuthService } from "../Login/auth.service";
 import { useLocation } from 'react-router-dom';
 import { RecipeService, Recipe as APIRecipe } from "./recipe.service";
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from "@mui/material/Container";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -14,11 +12,7 @@ import RecipeTitle from "./RecipeTitle";
 import RecipeIngredients  from "./RecipeIngredients";
 import RecipeInstructions from "./RecipeInstructions";
 
-type RecipeProps = {
-  authService: AuthService;
-}
-
-export default function Recipe(props: RecipeProps) {
+export default function Recipe() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
@@ -44,9 +38,7 @@ export default function Recipe(props: RecipeProps) {
 
   return (
     <div>
-      <MenuBar
-        authService={props.authService}
-      />
+      <MenuBar />
       <Container
         maxWidth="xs"
         style={{

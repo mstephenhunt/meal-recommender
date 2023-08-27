@@ -7,18 +7,16 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
-import { AuthService } from "./auth.service";
 import Signup from "./Signup";
-import { useLocation } from 'react-router-dom';
+import { useAuthService } from "./auth.context";
 
-export default function Login(props: { authService: AuthService }) {
+export default function Login() {
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [loginErrors, setLoginErrors] = useState<string[]>([]);
   const [isSignupOpen, setIsSignupOpen] = useState(false); 
   const navigate = useNavigate();
-
-  const { authService } = props;
+  const authService = useAuthService();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -45,14 +43,6 @@ export default function Login(props: { authService: AuthService }) {
       setLoginErrors([error.message]);
     }
   };
-
-  /**
-   * If you're not logged in and not on the login page, redirect to the login page.
-   */
-  const location = useLocation();
-  if (!authService.isLoggedIn() && location.pathname !== '/') {
-    navigate('/');
-  }
 
   return (
     <Container maxWidth="xs">

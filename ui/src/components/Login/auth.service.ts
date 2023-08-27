@@ -14,11 +14,13 @@ export class AuthService {
     this.cancelTokenRefresh = this.cancelTokenRefresh.bind(this);
   }
 
-  public isLoggedIn(): boolean {
+  public hasJwt(): boolean {
     return !!Cookies.get('jwt');
   }
 
   public logOut(): void {
+    console.log('hit log out')
+
     Cookies.remove('jwt');
     this.setLoginState(false);
   }
