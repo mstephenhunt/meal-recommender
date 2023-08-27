@@ -6,6 +6,7 @@ import DietaryRestrictionsPage from './components/DietaryRestrictions/DietaryRes
 import { AuthService } from './components/Login/auth.service';
 import RecipeSuggestor from './components/RecipeSuggestor/RecipeSuggestor';
 import Recipe from './components/Recipe/Recipe';
+import AppBase from './components/AppBase/AppBase';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,23 +22,53 @@ export default function App() {
     <Routes>
       <Route
         path="/"
-        element={<Login authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <Login authService={authService} />
+            }
+          />
+        }
       />
       <Route
         path="/home"
-        element={<MainMenuPage authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <MainMenuPage authService={authService} />
+            }
+          />
+        }
       />
       <Route
         path="/dietary-restrictions"
-        element={<DietaryRestrictionsPage authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <DietaryRestrictionsPage authService={authService} />
+            }
+          />
+        }
       />
       <Route
         path="/recipe-suggestor"
-        element={<RecipeSuggestor authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <RecipeSuggestor authService={authService} />
+            }
+          />
+        }
       />
       <Route
         path="/recipe"
-        element={<Recipe authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <Recipe authService={authService} />
+            }
+          />
+        }
       />
     </Routes>
   );
