@@ -6,51 +6,99 @@ import DietaryRestrictionsPage from './components/DietaryRestrictions/DietaryRes
 import { AuthService } from './components/Login/auth.service';
 import RecipeSuggestor from './components/RecipeSuggestor/RecipeSuggestor';
 import Recipe from './components/Recipe/Recipe';
+import AppBase from './components/AppBase/AppBase';
+import { AuthProvider } from './components/Login/auth.context';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [checkedJwt, setCheckedJwt] = useState(false);
   const authService = useMemo(() => new AuthService(setIsLoggedIn), []);
 
   useEffect(() => {
-    if (!authService.isLoggedIn()) {
-      authService.logOut();
+    // When the user refreshes the page, the isLoggedIn state is lost. To reset
+    // this to the correct value, see if the user has a valid JWT.
+    if (!isLoggedIn && authService.hasJwt()) {
+      setIsLoggedIn(true);
     }
-  }, [isLoggedIn, authService]);
+
+    setCheckedJwt(true);
+  }, [isLoggedIn, setCheckedJwt, authService]);
+
+  /**
+   * If we haven't checked the JWT yet, return null. This is to prevent the
+   * Login component from being rendered before we've had a chance to check
+   * if the user is actually logged in or not. This occurs when the user
+   * refreshes the page.
+   */
+  if (!checkedJwt) {
+    return null;
+  }
 
   const routes = (
     <Routes>
       <Route
         path="/"
-        element={<Login authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <Login />
+            }
+            isLoggedIn={isLoggedIn}
+          />
+        }
       />
       <Route
         path="/home"
-        element={<MainMenuPage authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <MainMenuPage />
+            }
+            isLoggedIn={isLoggedIn}
+          />
+        }
       />
       <Route
         path="/dietary-restrictions"
-        element={<DietaryRestrictionsPage authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <DietaryRestrictionsPage />
+            }
+            isLoggedIn={isLoggedIn}
+          />
+        }
       />
       <Route
         path="/recipe-suggestor"
-        element={<RecipeSuggestor authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <RecipeSuggestor />
+            }
+            isLoggedIn={isLoggedIn}
+          />
+        }
       />
       <Route
         path="/recipe"
-        element={<Recipe authService={authService} />}
+        element={
+          <AppBase
+            children={
+              <Recipe />
+            }
+            isLoggedIn={isLoggedIn}
+          />
+        }
       />
     </Routes>
   );
 
   return (
     <Router>
-      {authService.isLoggedIn() ? (
-        // If logged in, show the routes
-        routes
-      ) : (
-        // If not logged in, redirect to the login page
-        <Login authService={authService} />
-      )}
+      <AuthProvider authService={authService}>
+        {routes}
+      </AuthProvider>
     </Router>
   );
 }

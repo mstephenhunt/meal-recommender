@@ -14,7 +14,19 @@ export class AuthService {
     this.cancelTokenRefresh = this.cancelTokenRefresh.bind(this);
   }
 
-  public isLoggedIn(): boolean {
+  public get jwt(): string {
+    return Cookies.get('jwt')!;
+  }
+
+  /**
+   * This has a very specific use case for internal requests. Generally should be
+   * using the loggedIn state otherwise.
+   */
+  public get loggedIn(): boolean {
+    return !!Cookies.get('jwt');
+  }
+
+  public hasJwt(): boolean {
     return !!Cookies.get('jwt');
   }
 

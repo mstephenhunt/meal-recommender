@@ -8,17 +8,14 @@ import Box from "@mui/material/Box";
 import DietaryRestrictionItem from "./DietaryRestrictionItem";
 import { useNavigate } from "react-router-dom";
 import { DietaryRestrictionsService } from "./dietary-restrictions.service";
-import { AuthService } from "../Login/auth.service";
+import { useInternalRequest } from "../../services/internal-request";
 
-type DietaryRestrictionsPageProps = {
-  authService: AuthService;
-};
-
-export default function DietaryRestrictionsPage(props: DietaryRestrictionsPageProps) {
+export default function DietaryRestrictionsPage() {
   const [currentDietaryRestriction, setCurrentDietaryRestriction] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
 
   const navigate = useNavigate();
+  const internalRequest = useInternalRequest();
 
   const handleDone = () => {
     navigate('/home');
@@ -28,7 +25,7 @@ export default function DietaryRestrictionsPage(props: DietaryRestrictionsPagePr
     // Fetch dietary restrictions and set them in the state
     const fetchDietaryRestrictions = async () => {
       try {
-        const restrictions = await DietaryRestrictionsService.getCurrentDietaryRestrictions();
+        const restrictions = await DietaryRestrictionsService.getCurrentDietaryRestrictions({ internalRequest });
         setDietaryRestrictions(restrictions);
       } catch (error) {
         console.error("Error fetching dietary restrictions:", error);
@@ -36,7 +33,7 @@ export default function DietaryRestrictionsPage(props: DietaryRestrictionsPagePr
     };
 
     fetchDietaryRestrictions();
-  }, []); // Empty dependency array ensures it only runs on mount
+  }, [internalRequest]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentDietaryRestriction(event.target.value);
@@ -47,13 +44,19 @@ export default function DietaryRestrictionsPage(props: DietaryRestrictionsPagePr
       setDietaryRestrictions([...dietaryRestrictions, currentDietaryRestriction]);
       setCurrentDietaryRestriction("");
 
-      DietaryRestrictionsService.saveDietaryRestriction(currentDietaryRestriction);
+      DietaryRestrictionsService.saveDietaryRestriction({
+        dietaryRestrictionName: currentDietaryRestriction,
+        internalRequest,
+      });
     }
   };
 
   const handleRemoveDietaryRestriction = (index: number) => {
     const toDelete = dietaryRestrictions[index];
-    DietaryRestrictionsService.deleteDietaryRestriction(toDelete);
+    DietaryRestrictionsService.deleteDietaryRestriction({
+      dietaryRestrictionName: toDelete,
+      internalRequest,
+    });
 
     const updatedRestrictions = [...dietaryRestrictions];
     updatedRestrictions.splice(index, 1);
@@ -68,9 +71,7 @@ export default function DietaryRestrictionsPage(props: DietaryRestrictionsPagePr
         flexDirection: "column",
       }}
     >
-      <MenuBar 
-        authService={props.authService}
-      />
+      <MenuBar />
       <Container
         maxWidth="xs"
         style={{

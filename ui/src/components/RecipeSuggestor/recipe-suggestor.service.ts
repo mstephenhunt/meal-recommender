@@ -1,17 +1,10 @@
-import Cookies from 'js-cookie';
+import { InternalRequest } from "../../services/internal-request";
 
 export class RecipeSuggestorService {
-  public static async getRecipeNames(): Promise<string[]> {
-    const baseUrl = process.env.REACT_APP_API_URL;
-
-    console.log('Loading...')
-
-    const response = await fetch(`${baseUrl}/recipe/request-recipe-names`, {
+  public static async getRecipeNames(internalRequest: InternalRequest): Promise<string[]> {
+    const response = await internalRequest({
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": `Bearer ${Cookies.get('jwt')}`,
-      },
+      url: '/recipe/request-recipe-names',
     });
 
     const responseBody = await response.json();
