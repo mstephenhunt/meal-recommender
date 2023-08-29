@@ -8,12 +8,14 @@ import Box from "@mui/material/Box";
 import DietaryRestrictionItem from "./DietaryRestrictionItem";
 import { useNavigate } from "react-router-dom";
 import { DietaryRestrictionsService } from "./dietary-restrictions.service";
+import { useInternalRequest } from "../../services/internal-request";
 
 export default function DietaryRestrictionsPage() {
   const [currentDietaryRestriction, setCurrentDietaryRestriction] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
 
   const navigate = useNavigate();
+  const internalRequest = useInternalRequest();
 
   const handleDone = () => {
     navigate('/home');
@@ -23,7 +25,7 @@ export default function DietaryRestrictionsPage() {
     // Fetch dietary restrictions and set them in the state
     const fetchDietaryRestrictions = async () => {
       try {
-        const restrictions = await DietaryRestrictionsService.getCurrentDietaryRestrictions();
+        const restrictions = await DietaryRestrictionsService.getCurrentDietaryRestrictions({ internalRequest });
         setDietaryRestrictions(restrictions);
       } catch (error) {
         console.error("Error fetching dietary restrictions:", error);
@@ -31,7 +33,7 @@ export default function DietaryRestrictionsPage() {
     };
 
     fetchDietaryRestrictions();
-  }, []); // Empty dependency array ensures it only runs on mount
+  }, [internalRequest]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentDietaryRestriction(event.target.value);
@@ -42,13 +44,19 @@ export default function DietaryRestrictionsPage() {
       setDietaryRestrictions([...dietaryRestrictions, currentDietaryRestriction]);
       setCurrentDietaryRestriction("");
 
-      DietaryRestrictionsService.saveDietaryRestriction(currentDietaryRestriction);
+      DietaryRestrictionsService.saveDietaryRestriction({
+        dietaryRestrictionName: currentDietaryRestriction,
+        internalRequest,
+      });
     }
   };
 
   const handleRemoveDietaryRestriction = (index: number) => {
     const toDelete = dietaryRestrictions[index];
-    DietaryRestrictionsService.deleteDietaryRestriction(toDelete);
+    DietaryRestrictionsService.deleteDietaryRestriction({
+      dietaryRestrictionName: toDelete,
+      internalRequest,
+    });
 
     const updatedRestrictions = [...dietaryRestrictions];
     updatedRestrictions.splice(index, 1);

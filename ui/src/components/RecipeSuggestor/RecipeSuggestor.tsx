@@ -6,9 +6,11 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from 'react-router-dom';
+import { useInternalRequest } from '../../services/internal-request';
 
 export default function RecipeSuggestor() {
   const navigate = useNavigate();
+  const internalRequest = useInternalRequest();
 
   const [recipeNames, setRecipeNames] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +26,7 @@ export default function RecipeSuggestor() {
   useEffect(() => {
     async function getRecipeNames() {
       try {
-        const recipeNames = await RecipeSuggestorService.getRecipeNames();
+        const recipeNames = await RecipeSuggestorService.getRecipeNames(internalRequest);
         setRecipeNames(recipeNames);
       } catch (error) {
         console.error(error);
@@ -34,7 +36,7 @@ export default function RecipeSuggestor() {
     }
 
     getRecipeNames();
-  }, []);
+  }, [internalRequest]);
 
   return (
     <div>

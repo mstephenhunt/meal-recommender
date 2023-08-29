@@ -11,10 +11,13 @@ import { useNavigate } from "react-router-dom";
 import RecipeTitle from "./RecipeTitle";
 import RecipeIngredients  from "./RecipeIngredients";
 import RecipeInstructions from "./RecipeInstructions";
+import { useInternalRequest } from "../../services/internal-request";
 
 export default function Recipe() {
   const location = useLocation();
   const navigate = useNavigate();
+  const internalRequest = useInternalRequest();
+
   const queryParams = new URLSearchParams(location.search);
   const recipeName = queryParams.get('recipeName');
 
@@ -24,7 +27,10 @@ export default function Recipe() {
   useEffect(() => {
     async function getRecipe() {
       try {
-        const recipeData = await RecipeService.getRecipe(recipeName!);
+        const recipeData = await RecipeService.getRecipe({
+          recipeName: recipeName!,
+          internalRequest,
+        });
         setRecipe(recipeData);
       } catch (error) {
         console.error(error);
@@ -34,7 +40,7 @@ export default function Recipe() {
     }
 
     getRecipe();
-  }, [recipeName]);
+  }, [recipeName, internalRequest]);
 
   return (
     <div>

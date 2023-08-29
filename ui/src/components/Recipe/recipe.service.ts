@@ -1,4 +1,4 @@
-import Cookie from "js-cookie";
+import { InternalRequest } from "../../services/internal-request";
 
 export type Recipe = {
   id: number;
@@ -17,15 +17,15 @@ export type Recipe = {
 }
 
 export class RecipeService {
-  public static async getRecipe(recipeName: string): Promise<Recipe> {
-    const baseUrl = process.env.REACT_APP_API_URL;
+  public static async getRecipe(input: {
+    internalRequest: InternalRequest,
+    recipeName: string
+  }): Promise<Recipe> {
+    const { internalRequest, recipeName } = input;
 
-    const response = await fetch(`${baseUrl}/recipe/generate-recipe?recipeName=${recipeName}`, {
-      method: "GET",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${Cookie.get('jwt')}`
-      },
+    const response = await internalRequest({
+      method: 'GET',
+      url: `/recipe/generate-recipe?recipeName=${recipeName}`,
     });
 
     return response.json();
