@@ -36,7 +36,7 @@ export default function RecipeSuggestor() {
     }
 
     getRecipeNames();
-  }, [internalRequest]);
+  }, []); // This should be an empty array, so that the effect only runs once
 
   return (
     <div>
