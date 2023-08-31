@@ -9,7 +9,7 @@ local_connection="${DATABASE_URL}"
 
 # Dump the production database to a file
 dump_file="production_dump.sql"
-# pg_dump "$prod_connection" --file="$dump_file"
+pg_dump "$prod_connection" --file="$dump_file"
 
 # Drop all tables in the local database
 psql "$local_connection" --command="DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
@@ -18,6 +18,6 @@ psql "$local_connection" --command="DROP SCHEMA public CASCADE; CREATE SCHEMA pu
 psql "$local_connection" --file="$dump_file"
 
 # # Remove the dump file
-# rm "$dump_file"
+rm "$dump_file"
 
 echo "Database cloned from production to local."
