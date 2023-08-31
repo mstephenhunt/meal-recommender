@@ -45,7 +45,7 @@ model RecipeIngredient {
   updatedAt       DateTime        @updatedAt                       @map("updated_at")
   recipeId        Int
   ingredientId    Int
-  quantity        Int
+  quantity        Float
   unit            String
 
   @@map("recipe_ingredients")
