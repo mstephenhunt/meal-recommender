@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -43,6 +43,15 @@ export default function Login() {
       setLoginErrors([error.message]);
     }
   };
+
+  /**
+   * If the user is already logged in, redirect them to the home page.
+   */
+  useEffect(() => {
+    if (authService.loggedIn) {
+      navigate("/home");
+    }
+  }, [authService, navigate]);
 
   return (
     <Container maxWidth="xs">
