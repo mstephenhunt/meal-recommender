@@ -12,6 +12,7 @@ export default function RecipeSuggestor() {
   const navigate = useNavigate();
   const internalRequest = useInternalRequest();
 
+  const [generateRecipeNames, setGenerateRecipeNames] = useState(true);
   const [recipeNames, setRecipeNames] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -21,6 +22,11 @@ export default function RecipeSuggestor() {
 
   const handleRecipeClick = (recipeName: string) => {
     navigate(`/recipe?recipeName=${encodeURIComponent(recipeName)}`);
+  };
+
+  const handleNewRecipesClick = () => {
+    setGenerateRecipeNames(true);
+    setIsLoading(true);
   };
 
   useEffect(() => {
@@ -35,8 +41,11 @@ export default function RecipeSuggestor() {
       setIsLoading(false);
     }
 
-    getRecipeNames();
-  }, []); // This should be an empty array, so that the effect only runs once
+    if (generateRecipeNames) {
+      getRecipeNames();
+      setGenerateRecipeNames(false);
+    }
+  }, [generateRecipeNames, internalRequest]);
 
   return (
     <div>
@@ -80,15 +89,27 @@ export default function RecipeSuggestor() {
         />
         <Button
           variant="contained"
-          sx={{ textTransform: "none", marginTop: '10px' }}
-          disabled
+          sx={{ 
+            textTransform: "none",
+            marginTop: '10px',  
+            height: "70px",
+            width: "100%",
+            fontWeight: "bold",
+          }}
+          onClick={handleNewRecipesClick}
         >
           Make New Recipes
         </Button>
         <Button
           variant="contained"
-          sx={{ textTransform: "none", marginTop: '10px' }}
           onClick={handleBack}
+          sx={{
+            textTransform: "none",
+            marginTop: '10px',  
+            height: "70px",
+            width: "100%",
+            fontWeight: "bold",
+          }}
         >
           Back
         </Button>
