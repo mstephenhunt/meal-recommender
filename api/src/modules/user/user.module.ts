@@ -9,6 +9,9 @@ import { ConfigModule } from '@nestjs/config';
 import { UserPreferencesService } from './services/user-preferences.service';
 import { LoggerModule } from 'nestjs-pino';
 import { DietaryRestrictionModule } from '../dietary-restriction/dietary-restriction.module';
+import { RecipeModule } from '../recipe/recipe.module';
+import { UserRecipesController } from './controllers/user-recipe.controller';
+import { UserRecipeService } from './services/user-recipe.service';
 
 @Module({
   imports: [
@@ -17,14 +20,19 @@ import { DietaryRestrictionModule } from '../dietary-restriction/dietary-restric
     ConfigModule.forRoot(),
     LoggerModule,
     DietaryRestrictionModule,
+    RecipeModule,
   ],
-  controllers: [UserController, UserPreferencesController],
+  controllers: [
+    UserController,
+    UserPreferencesController,
+    UserRecipesController,
+  ],
   providers: [
     UserService,
     UserContextService,
     UserPreferencesService,
     UserContextService,
+    UserRecipeService,
   ],
-  exports: [UserService, UserContextService],
 })
 export class UserModule {}

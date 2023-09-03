@@ -4,7 +4,7 @@ export class RecipeSuggestorService {
   public static async getRecipeNames(internalRequest: InternalRequest): Promise<string[]> {
     const response = await internalRequest({
       method: 'GET',
-      url: '/recipe/request-recipe-names',
+      url: '/me/recipes/request-recipe-names',
     });
 
     const responseBody = await response.json();

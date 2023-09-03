@@ -25,7 +25,7 @@ export class RecipeService {
 
     const response = await internalRequest({
       method: 'GET',
-      url: `/recipe/generate-recipe?recipeName=${recipeName}`,
+      url: `/me/recipes/generate-recipe?recipeName=${recipeName}`,
     });
 
     return response.json();

@@ -4,9 +4,7 @@ import { IngredientService } from './services/ingredient.service';
 import { DbModule } from '../db/db.module';
 import { DietaryRestrictionModule } from '../dietary-restriction/dietary-restriction.module';
 import { OpenaiModule } from '../openai/openai.module';
-import { UserModule } from '../user/user.module';
 import { LoggerModule } from 'nestjs-pino';
-import { RecipeController } from './controllers/recipe.controller';
 import { AuthModule } from '../auth/auth.module';
 import { UserRecipeService } from './services/user-recipe.service';
 
@@ -14,12 +12,11 @@ import { UserRecipeService } from './services/user-recipe.service';
   imports: [
     DbModule,
     OpenaiModule,
-    UserModule,
     LoggerModule,
     DietaryRestrictionModule,
     AuthModule,
   ],
-  controllers: [RecipeController],
   providers: [RecipeService, IngredientService, UserRecipeService],
+  exports: [RecipeService],
 })
 export class RecipeModule {}

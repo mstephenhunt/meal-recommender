@@ -34,4 +34,5 @@ export type RecipeInput = {
   name: string;
   instructions: string;
   recipeIngredients: RecipeIngredientInput[];
+  dietaryRestrictions?: DietaryRestriction[];
 };

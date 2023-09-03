@@ -2,20 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Recipe } from '../types';
 import { PrismaService } from '../../db/services/prisma.service';
-import { UserContextService } from '../../user/services/user-context.service';
 
 @Injectable()
 export class UserRecipeService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly userContextService: UserContextService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   /**
    * For the current user, get all their created recipes
    */
-  public async getUserSavedRecipes(): Promise<Recipe[]> {
-    const userId = await this.userContextService.userId;
+  public async getUserSavedRecipes(input: {
+    userId: number;
+  }): Promise<Recipe[]> {
+    const { userId } = input;
 
     const userRecipes = await this.prisma.$queryRaw<
       {
@@ -82,8 +80,11 @@ export class UserRecipeService {
   /**
    * For the current user, returns a recipe if one exists for the provided name
    */
-  public async getUserCachedRecipeByName(name: string): Promise<Recipe | null> {
-    const userId = await this.userContextService.userId;
+  public async getUserCachedRecipeByName(input: {
+    userId: number;
+    name: string;
+  }): Promise<Recipe | null> {
+    const { userId, name } = input;
 
     const userRecipe = await this.prisma.$queryRaw<
       {
