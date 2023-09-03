@@ -4,9 +4,7 @@ import { Ingredient, Recipe, RecipeInput } from '../types';
 import { IngredientService } from './ingredient.service';
 import { Logger } from 'nestjs-pino';
 import { OpenaiService } from '../../openai/services/openai.service';
-import { UserService } from '../../user/services/user.service';
-import { UserContextService } from '../../user/services/user-context.service';
-import { DietaryRestrictionService } from '../../dietary-restriction/services/dietary-restriction.service';
+import { DietaryRestriction } from '../../dietary-restriction/services/dietary-restriction.service';
 import { UserRecipeService } from './user-recipe.service';
 
 @Injectable()
@@ -16,18 +14,13 @@ export class RecipeService {
     private readonly ingredientService: IngredientService,
     private readonly logger: Logger,
     private readonly openaiService: OpenaiService,
-    private readonly userService: UserService,
-    private readonly userContextService: UserContextService,
-    private readonly dietaryRestrictionService: DietaryRestrictionService,
     private readonly userRecipeService: UserRecipeService,
   ) {}
 
-  public async requestRecipeNames(): Promise<string[]> {
-    this.logger.log('Requesting recipe names');
-
-    const userId = await this.userContextService.userId;
-    const dietaryRestrictions =
-      await this.dietaryRestrictionService.getUserDietaryRestrictions(userId);
+  public async requestRecipeNames(input: {
+    dietaryRestrictions: DietaryRestriction[];
+  }): Promise<string[]> {
+    const { dietaryRestrictions } = input;
 
     const recipeNames = await this.openaiService.requestRecipeNames({
       dietaryRestrictions: dietaryRestrictions.map((dr) => dr.name),
@@ -36,10 +29,21 @@ export class RecipeService {
     return recipeNames;
   }
 
-  public async requestRecipe(input: { recipeName: string }): Promise<Recipe> {
+  // DEPRECATED
+  // Will be replaced with a function that directly takes in all the recipe filters
+  public async requestRecipe(input: {
+    userId: number;
+    recipeName: string;
+    dietaryRestrictions: DietaryRestriction[];
+  }): Promise<Recipe> {
+    const { userId, recipeName, dietaryRestrictions } = input;
+
     // Double-check, does this recipe already exist?
     const existingRecipe =
-      await this.userRecipeService.getUserCachedRecipeByName(input.recipeName);
+      await this.userRecipeService.getUserCachedRecipeByName({
+        userId,
+        name: recipeName,
+      });
 
     if (existingRecipe) {
       this.logger.log('Recipe already exists', {
@@ -61,6 +65,7 @@ export class RecipeService {
         quantity: ingredient.quantity || 0,
         unit: ingredient.unit,
       })),
+      dietaryRestrictions,
     };
 
     this.logger.log('Saving recipe', {
@@ -68,16 +73,19 @@ export class RecipeService {
     });
     const savedRecipe = await this.saveRecipe(recipeInput);
 
-    await this.userService.associateRecipe({
-      recipeId: savedRecipe.id,
-    });
-
     this.logger.log('Completed recipe lookup');
     return savedRecipe;
   }
 
-  public async getUserSavedRecipes(): Promise<Recipe[]> {
-    return this.userRecipeService.getUserSavedRecipes();
+  /**
+   * Currently ununsed
+   */
+  public async getUserSavedRecipes(input: {
+    userId: number;
+  }): Promise<Recipe[]> {
+    return this.userRecipeService.getUserSavedRecipes({
+      userId: input.userId,
+    });
   }
 
   private async saveRecipe(recipe: RecipeInput): Promise<Recipe> {
@@ -106,9 +114,7 @@ export class RecipeService {
       });
 
       // Get the dietary restrictions for this user
-      const userId = await this.userContextService.userId;
-      const dietaryRestrictions =
-        await this.dietaryRestrictionService.getUserDietaryRestrictions(userId);
+      const dietaryRestrictions = recipe.dietaryRestrictions || [];
 
       // Associate the dietary restrictions to the recipe
       await Promise.all(

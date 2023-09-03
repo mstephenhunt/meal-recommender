@@ -4,7 +4,6 @@ import { PrismaService } from '../../db/services/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from 'nestjs-pino';
 import * as Joi from 'joi';
-import { UserContextService } from './user-context.service';
 
 type User = {
   email: string;
@@ -18,7 +17,6 @@ export class UserService {
     private readonly prismaService: PrismaService,
     private readonly configService: ConfigService,
     private readonly logger: Logger,
-    private readonly userContextService: UserContextService,
   ) {}
 
   public async logIn(input: {
@@ -101,24 +99,5 @@ export class UserService {
       email: formattedEmail,
       jwt: this.authService.getJwt(user.id),
     };
-  }
-
-  public async associateRecipe(input: { recipeId: number }): Promise<void> {
-    // Associate this recipe to the current user
-    const { recipeId } = input;
-
-    const userId = await this.userContextService.userId;
-
-    this.logger.log('Associating recipe to user', {
-      userId,
-      recipeId,
-    });
-
-    await this.prismaService.userRecipe.create({
-      data: {
-        userId,
-        recipeId,
-      },
-    });
   }
 }
