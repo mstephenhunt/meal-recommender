@@ -108,8 +108,6 @@ export class UserRecipeService {
       `,
     );
 
-    console.log(`\n\n----> ${userRecipe}\n\n`);
-
     if (userRecipe.length !== 1) {
       return null;
     }
