@@ -20,15 +20,6 @@ model User {
 // ----------------------------------------------------------------- //
 // Basic building blocks of a recipe
 // ----------------------------------------------------------------- //
-model Ingredient {
-  id                Int                @id                              @default(autoincrement())
-  createdAt         DateTime           @default(now())                  @map("created_at")
-  updatedAt         DateTime           @updatedAt                       @map("updated_at")
-  name              String             @unique
-
-  @@map("ingredients")
-}
-
 model Recipe {
   id              Int                   @id @default(autoincrement())
   createdAt         DateTime            @default(now())                  @map("created_at")
@@ -37,6 +28,19 @@ model Recipe {
   instructions      String
 
   @@map("recipes")
+}
+
+// ----------------------------------------------------------------- //
+// Recipe Filters/Metadata
+// ----------------------------------------------------------------- //
+model Ingredient {
+  id                Int                @id                              @default(autoincrement())
+  createdAt         DateTime           @default(now())                  @map("created_at")
+  updatedAt         DateTime           @updatedAt                       @map("updated_at")
+  name              String             @unique
+  displayName       String             @map("display_name")
+
+  @@map("ingredients")
 }
 
 model RecipeIngredient {
@@ -51,9 +55,47 @@ model RecipeIngredient {
   @@map("recipe_ingredients")
 }
 
-// ----------------------------------------------------------------- //
-// Recipe Metadata
-// ----------------------------------------------------------------- //
+model Allergen {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  name            String          @unique
+  displayName     String          @map("display_name")
+
+  @@map("allergens")
+}
+
+model RecipeAllergen {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  recipeId        Int                                              @map("recipe_id") 
+  allergenId      Int                                              @map("allergen_id")
+
+  @@map("recipe_allergens")
+}
+
+model Diet {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  name            String          @unique
+  displayName     String          @map("display_name")
+
+  @@map("diets")
+}
+
+model RecipeDiet {
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())                  @map("created_at")
+  updatedAt       DateTime        @updatedAt                       @map("updated_at")
+  recipeId        Int                                              @map("recipe_id") 
+  dietId          Int                                              @map("diet_id")
+
+  @@map("recipe_diets")
+}
+
+// DEPRECATED
 model RecipeDietaryRestriction {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())                  @map("created_at")
@@ -64,6 +106,7 @@ model RecipeDietaryRestriction {
   @@map("recipe_dietary_restrictions")
 }
 
+// DEPRECATED
 model DietaryRestriction {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())                  @map("created_at")
@@ -113,6 +156,7 @@ model RequestResponseCache {
 // ----------------------------------------------------------------- //
 // Used to track dietary restrictions related to user preferences
 // ----------------------------------------------------------------- //
+// DEPRECATED
 model UsersDietaryResctrictions {
   id                    Int             @id @default(autoincrement())
   createdAt             DateTime        @default(now())                  @map("created_at")
@@ -123,6 +167,25 @@ model UsersDietaryResctrictions {
   @@map("users_dietary_restrictions")
 }
 
+model UsersIngredients {
+  id                    Int             @id @default(autoincrement())
+  createdAt             DateTime        @default(now())                  @map("created_at")
+  updatedAt             DateTime        @updatedAt                       @map("updated_at")
+  userId                Int                                              @map("user_id")
+  ingredientId          Int                                              @map("ingredient_id")
+
+  @@map("user_ingredients")
+}
+
+model UsersAllergens {
+  id                    Int             @id @default(autoincrement())
+  createdAt             DateTime        @default(now())                  @map("created_at")
+  updatedAt             DateTime        @updatedAt                       @map("updated_at")
+  userId                Int                                              @map("user_id")
+  allergenId            Int                                              @map("allergen_id")
+
+  @@map("user_allergens")
+}
 
 // ----------------------------------------------------------------- //
 // Associates users to recipes. Used for history and favorites.
@@ -131,8 +194,9 @@ model UserRecipe {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())                  @map("created_at")
   updatedAt       DateTime        @updatedAt                       @map("updated_at")
-  userId          Int
-  recipeId        Int
+  userId          Int                                              @map("user_id")
+  recipeId        Int                                              @map("recipe_id")
 
   @@map("user_recipes")
+  @@unique([userId, recipeId])
 }

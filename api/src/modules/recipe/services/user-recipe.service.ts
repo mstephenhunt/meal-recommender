@@ -39,6 +39,7 @@ export class UserRecipeService {
           {
             ingredientId: number;
             name: string;
+            displayName: string;
             recipeIngredientId: number;
             quantity: number;
             unit: string;
@@ -47,6 +48,7 @@ export class UserRecipeService {
           SELECT
             i.id as "ingredientId",
             i.name,
+            i.display_name as "displayName",
             ri.id as "recipeIngredientId",
             ri.quantity,
             ri.unit
@@ -66,6 +68,7 @@ export class UserRecipeService {
             ingredient: {
               id: ingredient.ingredientId,
               name: ingredient.name,
+              displayName: ingredient.displayName,
             },
             quantity: ingredient.quantity,
             unit: ingredient.unit,
@@ -99,8 +102,8 @@ export class UserRecipeService {
           r.name,
           r.instructions
         FROM user_recipes ur
-        JOIN recipes r ON ur."recipeId" = r.id
-        WHERE ur."userId" = ${userId}
+        JOIN recipes r ON ur.recipe_id = r.id
+        WHERE ur.user_id = ${userId}
           AND r.name = ${name};
       `,
     );
@@ -119,6 +122,7 @@ export class UserRecipeService {
       {
         ingredientId: number;
         name: string;
+        displayName: string;
         recipeIngredientId: number;
         quantity: number;
         unit: string;
@@ -127,6 +131,7 @@ export class UserRecipeService {
       SELECT
         i.id as "ingredientId",
         i.name,
+        i.display_name as "displayName",
         ri.id as "recipeIngredientId",
         ri.quantity,
         ri.unit
@@ -161,6 +166,7 @@ export class UserRecipeService {
         id: ingredient.recipeIngredientId,
         ingredient: {
           id: ingredient.ingredientId,
+          displayName: ingredient.displayName,
           name: ingredient.name,
         },
         quantity: ingredient.quantity,

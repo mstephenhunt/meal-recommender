@@ -19,6 +19,7 @@ export class RecipeEntity {
           {
             id: recipeIngredient.ingredient.id,
             name: recipeIngredient.ingredient.name,
+            displayName: recipeIngredient.ingredient.displayName,
           },
           recipeIngredient.quantity,
           recipeIngredient.unit,
