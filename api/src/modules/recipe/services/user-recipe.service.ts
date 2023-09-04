@@ -102,11 +102,13 @@ export class UserRecipeService {
           r.name,
           r.instructions
         FROM user_recipes ur
-        JOIN recipes r ON ur."recipeId" = r.id
-        WHERE ur."userId" = ${userId}
+        JOIN recipes r ON ur.recipe_id = r.id
+        WHERE ur.user_id = ${userId}
           AND r.name = ${name};
       `,
     );
+
+    console.log(`\n\n----> ${userRecipe}\n\n`);
 
     if (userRecipe.length !== 1) {
       return null;

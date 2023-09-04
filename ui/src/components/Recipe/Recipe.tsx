@@ -39,8 +39,10 @@ export default function Recipe() {
       setIsLoading(false);
     }
 
-    getRecipe();
-  }, [recipeName, internalRequest]);
+    if (!recipe) {
+      getRecipe();
+    }
+  }, [recipeName, internalRequest, recipe]);
 
   return (
     <div>

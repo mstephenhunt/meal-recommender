@@ -47,12 +47,23 @@ export class UserRecipeService {
       recipeId: recipe.id,
     });
 
-    await this.prismaService.userRecipe.create({
-      data: {
+    // Does this user recipe mapping already exist?
+    const existingUserRecipe = await this.prismaService.userRecipe.findFirst({
+      where: {
         userId,
         recipeId: recipe.id,
       },
     });
+
+    // If it doesn't exist, create it
+    if (!existingUserRecipe) {
+      await this.prismaService.userRecipe.create({
+        data: {
+          userId,
+          recipeId: recipe.id,
+        },
+      });
+    }
 
     return recipe;
   }
