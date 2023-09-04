@@ -38,6 +38,7 @@ model Ingredient {
   createdAt         DateTime           @default(now())                  @map("created_at")
   updatedAt         DateTime           @updatedAt                       @map("updated_at")
   name              String             @unique
+  displayName       String             @map("display_name")
 
   @@map("ingredients")
 }
