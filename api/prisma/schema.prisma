@@ -55,7 +55,7 @@ model RecipeIngredient {
   @@map("recipe_ingredients")
 }
 
-model Allergens {
+model Allergen {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())                  @map("created_at")
   updatedAt       DateTime        @updatedAt                       @map("updated_at")

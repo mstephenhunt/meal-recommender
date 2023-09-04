@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../db/services/prisma.service';
 import { Ingredient, Recipe, RecipeInput } from '../types';
-import { IngredientService } from './ingredient.service';
+import { RecipeFilterService } from './recipe-filter.service';
 import { Logger } from 'nestjs-pino';
 import { OpenaiService } from '../../openai/services/openai.service';
 import { DietaryRestriction } from '../../dietary-restriction/services/dietary-restriction.service';
@@ -11,7 +11,7 @@ import { UserRecipeService } from './user-recipe.service';
 export class RecipeService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly ingredientService: IngredientService,
+    private readonly recipeFilterService: RecipeFilterService,
     private readonly logger: Logger,
     private readonly openaiService: OpenaiService,
     private readonly userRecipeService: UserRecipeService,
@@ -100,7 +100,11 @@ export class RecipeService {
       // Upsert the ingredients
       const savedIngredients = await Promise.all<Ingredient>(
         ingredients.map(
-          (ingredient) => this.ingredientService.upsertIngredient(ingredient),
+          (ingredient) =>
+            this.recipeFilterService.upsertIngredient({
+              ingredientInput: ingredient,
+              prismaTransaction: prisma,
+            }),
           prisma,
         ),
       );

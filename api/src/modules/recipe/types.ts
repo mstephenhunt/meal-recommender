@@ -1,8 +1,29 @@
 import { DietaryRestriction } from '../dietary-restriction/services/dietary-restriction.service';
 
+export type Allergen = {
+  id: number;
+  name: string;
+  displayName: string;
+};
+
+export type AllergenInput = {
+  name: string;
+};
+
+export type Diet = {
+  id: number;
+  name: string;
+  displayName: string;
+};
+
+export type DietInput = {
+  name: string;
+};
+
 export type Ingredient = {
   id: number;
   name: string;
+  displayName: string;
 };
 
 export type IngredientInput = {
