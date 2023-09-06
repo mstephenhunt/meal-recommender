@@ -12,6 +12,8 @@ import { DietaryRestrictionModule } from '../dietary-restriction/dietary-restric
 import { RecipeModule } from '../recipe/recipe.module';
 import { UserRecipesController } from './controllers/user-recipe.controller';
 import { UserRecipeService } from './services/user-recipe.service';
+import { UserRecipeFiltersController } from './controllers/user-recipe-filter.controller';
+import { UserRecipeFiltersService } from './services/user-recipe-filters.service';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { UserRecipeService } from './services/user-recipe.service';
     UserController,
     UserPreferencesController,
     UserRecipesController,
+    UserRecipeFiltersController,
   ],
   providers: [
     UserService,
@@ -33,6 +36,7 @@ import { UserRecipeService } from './services/user-recipe.service';
     UserPreferencesService,
     UserContextService,
     UserRecipeService,
+    UserRecipeFiltersService,
   ],
 })
 export class UserModule {}

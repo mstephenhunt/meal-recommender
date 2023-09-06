@@ -175,6 +175,7 @@ model UsersIngredients {
   ingredientId          Int                                              @map("ingredient_id")
 
   @@map("user_ingredients")
+  @@unique([userId, ingredientId])
 }
 
 model UsersAllergens {
@@ -185,6 +186,18 @@ model UsersAllergens {
   allergenId            Int                                              @map("allergen_id")
 
   @@map("user_allergens")
+  @@unique([userId, allergenId])
+}
+
+model UsersDiets {
+  id                    Int             @id @default(autoincrement())
+  createdAt             DateTime        @default(now())                  @map("created_at")
+  updatedAt             DateTime        @updatedAt                       @map("updated_at")
+  userId                Int                                              @map("user_id")
+  dietId                Int                                              @map("diet_id")
+
+  @@map("user_diets")
+  @@unique([userId, dietId])
 }
 
 // ----------------------------------------------------------------- //

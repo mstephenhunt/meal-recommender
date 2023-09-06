@@ -17,6 +17,6 @@ import { RecipeFilterService } from './services/recipe-filter.service';
     AuthModule,
   ],
   providers: [RecipeService, UserRecipeService, RecipeFilterService],
-  exports: [RecipeService],
+  exports: [RecipeService, RecipeFilterService],
 })
 export class RecipeModule {}
