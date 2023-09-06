@@ -53,7 +53,10 @@ export class RecipeService {
       return existingRecipe;
     }
 
-    const recipe = await this.openaiService.requestRecipe(input);
+    const recipe = await this.openaiService.requestRecipe({
+      recipeName,
+      dietaryRestrictions: dietaryRestrictions.map((dr) => dr.name),
+    });
 
     const recipeInput: RecipeInput = {
       name: recipe.name,
