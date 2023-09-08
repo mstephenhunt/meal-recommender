@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../db/services/prisma.service';
-import { Ingredient, Recipe, RecipeInput } from '../types';
+import { Ingredient, Recipe, RecipeInput, Allergen, Diet } from '../types';
 import { RecipeFilterService } from './recipe-filter.service';
 import { Logger } from 'nestjs-pino';
 import { OpenaiService } from '../../openai/services/openai.service';
 import { DietaryRestriction } from '../../dietary-restriction/services/dietary-restriction.service';
 import { UserRecipeService } from './user-recipe.service';
+import { SaveRecipeService } from './save-recipe.service';
 
 @Injectable()
 export class RecipeService {
@@ -15,6 +16,7 @@ export class RecipeService {
     private readonly logger: Logger,
     private readonly openaiService: OpenaiService,
     private readonly userRecipeService: UserRecipeService,
+    private readonly saveRecipeService: SaveRecipeService,
   ) {}
 
   public async requestRecipeNames(input: {
@@ -27,6 +29,46 @@ export class RecipeService {
     });
 
     return recipeNames;
+  }
+
+  public async requestFilteredRecipe(input: {
+    recipeName: string;
+    ingredients?: Ingredient[];
+    allergens?: Allergen[];
+    diets?: Diet[];
+  }): Promise<Recipe> {
+    const { recipeName, ingredients, allergens, diets } = input;
+
+    const recipe = await this.openaiService.requestRecipeWithFilters({
+      recipeName,
+      ingredients: ingredients.map((i) => i.name),
+      allergens: allergens.map((a) => a.name),
+      diets: diets.map((d) => d.name),
+    });
+
+    const recipeInput: RecipeInput = {
+      name: recipe.name,
+      instructions: recipe.instructions,
+      recipeIngredients: recipe.ingredients.map((ingredient) => ({
+        ingredient: {
+          name: ingredient.name,
+        },
+        quantity: ingredient.quantity || 0,
+        unit: ingredient.unit,
+      })),
+      filterAllergens: allergens,
+      filterDiets: diets,
+      filterIngredients: ingredients,
+    };
+
+    this.logger.log('Saving recipe', {
+      recipeInput,
+    });
+
+    const savedRecipe = await this.saveRecipeService.saveRecipe(recipeInput);
+
+    this.logger.log('Completed recipe lookup');
+    return savedRecipe;
   }
 
   // DEPRECATED
@@ -78,17 +120,6 @@ export class RecipeService {
 
     this.logger.log('Completed recipe lookup');
     return savedRecipe;
-  }
-
-  /**
-   * Currently ununsed
-   */
-  public async getUserSavedRecipes(input: {
-    userId: number;
-  }): Promise<Recipe[]> {
-    return this.userRecipeService.getUserSavedRecipes({
-      userId: input.userId,
-    });
   }
 
   private async saveRecipe(recipe: RecipeInput): Promise<Recipe> {

@@ -8,17 +8,6 @@ export type OpenAIMessage = {
   content: string;
 };
 
-export enum SuggestNextMealType {
-  SIMILAR = 'similar',
-  DIFFERENT = 'different',
-}
-
-export type SuggestNextMealInput = {
-  type: SuggestNextMealType;
-  mealNames: string[];
-  dietaryRestrictions?: string[];
-};
-
 export type OpenAIMeal = {
   name: string;
   ingredients: OpenAIIngredient[];

@@ -5,7 +5,6 @@ import { RequestCacheService } from '../../utils/services/request-cache.service'
 import { lastValueFrom } from 'rxjs';
 import {
   OpenAIMessage,
-  SuggestNextMealInput,
   OpenAIMeal,
   OpenAIRole,
   RequestRecipeNamesInput,
@@ -100,21 +99,31 @@ export class OpenaiService {
     return response;
   }
 
-  public async suggestNextMeal(
-    input: SuggestNextMealInput,
-  ): Promise<OpenAIMeal> {
+  public async requestRecipeWithFilters(input: {
+    recipeName: string;
+    ingredients?: string[];
+    allergens?: string[];
+    diets?: string[];
+  }): Promise<OpenAIMeal> {
+    const { recipeName, ingredients, allergens, diets } = input;
+
+    const ingredientsMessage = ingredients
+      ? `The recipe should use some or all of these ingredients: ${ingredients.join(
+          ', ',
+        )}.`
+      : undefined;
+    const allergensMessage = allergens
+      ? `The recipe should not contain these allergens: ${allergens.join(
+          ', ',
+        )}.`
+      : undefined;
+    const dietsMessage = diets
+      ? `The recipe should fit these diets: ${input.diets.join(', ')}.`
+      : undefined;
+
     const initializeMessage = {
       role: OpenAIRole.SYSTEM,
-      content: `You will be provided a list of meal names and a list of dietary restrictions. Please choose a ${
-        input.type
-      } type of meal 
-      to cook next that fits within those dietary restrictions. ${
-        this.responseFormat
-      }
-      
-      Meal names: ${input.mealNames.join(', ')}
-      Dietary restrictions: ${input.dietaryRestrictions.join(', ')}
-      `,
+      content: `Please provide a recipe for ${recipeName}. ${ingredientsMessage} ${allergensMessage} ${dietsMessage} ${this.responseFormat}`,
     };
 
     this.logger.log('Sending message to OpenAI', {
