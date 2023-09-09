@@ -8,6 +8,7 @@ import RecipeSuggestor from './components/RecipeSuggestor/RecipeSuggestor';
 import Recipe from './components/Recipe/Recipe';
 import AppBase from './components/AppBase/AppBase';
 import { AuthProvider } from './components/Login/auth.context';
+import BuildRecipe from './components/BuildRecipe/BuildRecipe';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -75,6 +76,17 @@ export default function App() {
           <AppBase
             children={
               <RecipeSuggestor />
+            }
+            isLoggedIn={isLoggedIn}
+          />
+        }
+      />
+      <Route
+        path="/build-recipe"
+        element={
+          <AppBase
+            children={
+              <BuildRecipe />
             }
             isLoggedIn={isLoggedIn}
           />
