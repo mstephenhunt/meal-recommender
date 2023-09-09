@@ -31,6 +31,7 @@ export class UserRecipeService {
     });
   }
 
+  // DEPRECATED
   public async generateRecipe(input: { recipeName: string }): Promise<Recipe> {
     const userId = await this.userContextService.userId;
     const dietaryRestrictions =

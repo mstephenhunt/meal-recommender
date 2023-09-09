@@ -49,6 +49,9 @@ export type Recipe = {
   instructions: string;
   recipeIngredients: RecipeIngredient[];
   dietaryRestrictions?: DietaryRestriction[];
+  filterIngredients?: Ingredient[];
+  filterAllergens?: Allergen[];
+  filterDiets?: Diet[];
 };
 
 export type RecipeInput = {
@@ -56,4 +59,7 @@ export type RecipeInput = {
   instructions: string;
   recipeIngredients: RecipeIngredientInput[];
   dietaryRestrictions?: DietaryRestriction[];
+  filterIngredients?: Ingredient[];
+  filterAllergens?: Allergen[];
+  filterDiets?: Diet[];
 };
