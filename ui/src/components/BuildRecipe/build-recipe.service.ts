@@ -1,18 +1,18 @@
 import { InternalRequest } from "../../services/internal-request";
 
-type FilterIngredient = {
+export type FilterIngredient = {
   id: number;
   name: string,
   displayName: string;
 }
 
-type FilterDiet = {
+export type FilterDiet = {
   id: number;
   name: string,
   displayName: string;
 }
 
-type FilterAllergen = {
+export type FilterAllergen = {
   id: number;
   name: string,
   displayName: string;
