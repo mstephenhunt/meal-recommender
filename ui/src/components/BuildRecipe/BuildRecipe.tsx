@@ -5,6 +5,7 @@ import { useInternalRequest } from '../../services/internal-request';
 import { BuildRecipeService, FilterIngredient, FilterDiet, FilterAllergen } from './build-recipe.service';
 import { Container } from '@mui/material';
 import { Button } from '@mui/material';
+import FilterIngredients from './FilterIngredients';
 
 export default function BuildRecipe() {
   const internalRequest = useInternalRequest();
@@ -79,7 +80,7 @@ export default function BuildRecipe() {
   }, [filterAllergens, internalRequest]);
 
   return (
-    <div>
+  <div>
       <MenuBar />
       <BotBase
         speechText="How would you like to make your recipe?"
@@ -91,11 +92,9 @@ export default function BuildRecipe() {
           flexDirection: "column",
         }}
       >
-        <Button
-          variant="outlined"
-          >
-            Ingredients
-        </Button>
+        <FilterIngredients
+          filterIngredients={filterIngredients}
+        />
       </Container>
     </div>
   );

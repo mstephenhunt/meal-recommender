@@ -3,7 +3,6 @@ import { createTheme } from '@mui/material/styles';
 // Create a custom theme
 const theme = createTheme({
   palette: {
-    contrastThreshold: 1,
     primary: {
       main: '#04AABD',
     }
@@ -15,6 +14,13 @@ const theme = createTheme({
           fontWeight: 'bold',
           textTransform: 'capitalize',
         },
+        contained: {
+          color: 'white',
+        },
+        outlined: {
+          borderColor: '#CFCFCF',
+          color: 'black',
+        }
       },
     },
   },
