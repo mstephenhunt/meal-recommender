@@ -3,6 +3,8 @@ import MenuBar from "../MenuBar/MenuBar";
 import BotBase from "../BotBase/BotBase";
 import { useInternalRequest } from '../../services/internal-request';
 import { BuildRecipeService, FilterIngredient, FilterDiet, FilterAllergen } from './build-recipe.service';
+import { Container } from '@mui/material';
+import { Button } from '@mui/material';
 
 export default function BuildRecipe() {
   const internalRequest = useInternalRequest();
@@ -82,6 +84,19 @@ export default function BuildRecipe() {
       <BotBase
         speechText="How would you like to make your recipe?"
       />
+      <Container
+        maxWidth="xs"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Button
+          variant="outlined"
+          >
+            Ingredients
+        </Button>
+      </Container>
     </div>
   );
 }
