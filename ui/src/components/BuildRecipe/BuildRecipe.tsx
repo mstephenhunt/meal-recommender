@@ -5,6 +5,7 @@ import { useInternalRequest } from '../../services/internal-request';
 import { BuildRecipeService, FilterIngredient, FilterDiet, FilterAllergen } from './build-recipe.service';
 import { Container } from '@mui/material';
 import FilterIngredients from './FilterIngredients';
+import FilterDiets from './FilterDiet';
 
 export default function BuildRecipe() {
   const internalRequest = useInternalRequest();
@@ -94,6 +95,11 @@ export default function BuildRecipe() {
         <FilterIngredients
           filterIngredients={filterIngredients}
           setFilterIngredients={setFilterIngredients}
+        />
+        <div style={{paddingTop: '15px'}} />
+        <FilterDiets
+          filterDiets={filterDiets}
+          setFilterDiets={setFilterDiets}
         />
       </Container>
     </div>
