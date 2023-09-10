@@ -4,7 +4,6 @@ import BotBase from "../BotBase/BotBase";
 import { useInternalRequest } from '../../services/internal-request';
 import { BuildRecipeService, FilterIngredient, FilterDiet, FilterAllergen } from './build-recipe.service';
 import { Container } from '@mui/material';
-import { Button } from '@mui/material';
 import FilterIngredients from './FilterIngredients';
 
 export default function BuildRecipe() {
@@ -80,7 +79,7 @@ export default function BuildRecipe() {
   }, [filterAllergens, internalRequest]);
 
   return (
-  <div>
+    <div>
       <MenuBar />
       <BotBase
         speechText="How would you like to make your recipe?"
@@ -94,6 +93,7 @@ export default function BuildRecipe() {
       >
         <FilterIngredients
           filterIngredients={filterIngredients}
+          setFilterIngredients={setFilterIngredients}
         />
       </Container>
     </div>
