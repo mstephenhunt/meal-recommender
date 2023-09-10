@@ -11,8 +11,12 @@ export default function MenuBar() {
       <AppBar position="static">
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <div></div> {/* Empty div to push the Log Out button to the right */}
-        <Button 
-          color="inherit"
+        <Button
+          sx={{
+            backgroundColor: "white",
+            color: "black",
+          }}
+          variant="contained"
           onClick={() => authService.logOut()}
         >
           Log Out
