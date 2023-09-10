@@ -65,7 +65,7 @@ export default function FilterDiets(props: FilterDietProps) {
         className="accordion-content"
         style={{
           overflow: 'hidden',
-          maxHeight: expandedAccordion ? '200px' : '0',
+          maxHeight: expandedAccordion ? undefined : '0',
           transition: 'max-height 0.3s ease-in-out, visibility 0.5s ease-in-out',
           visibility: expandedAccordion ? 'visible' : 'hidden',
         }}
@@ -105,14 +105,22 @@ export default function FilterDiets(props: FilterDietProps) {
               Add
             </Button>
           </Box>
-          {filterDiets?.map((filterDiet) => (
-            <FilterItem
-              key={filterDiet.id}
-              id={filterDiet.id}
-              name={filterDiet.displayName}
-              onRemove={handleRemoveFilterDiet}
-            />
-          ))}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+            }}
+          >
+            {filterDiets?.map((filterDiet) => (
+              <FilterItem
+                key={filterDiet.id}
+                id={filterDiet.id}
+                name={filterDiet.displayName}
+                onRemove={handleRemoveFilterDiet}
+              />
+            ))}
+          </Box>
         </Box>
       </div>
     </div>

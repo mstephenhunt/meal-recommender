@@ -65,7 +65,7 @@ export default function FilterAllergens(props: FilterAllergensProps) {
         className="accordion-content"
         style={{
           overflow: 'hidden',
-          maxHeight: expandedAccordion ? '200px' : '0',
+          maxHeight: expandedAccordion ? undefined : '0',
           transition: 'max-height 0.3s ease-in-out, visibility 0.5s ease-in-out',
           visibility: expandedAccordion ? 'visible' : 'hidden',
         }}
@@ -105,14 +105,22 @@ export default function FilterAllergens(props: FilterAllergensProps) {
               Add
             </Button>
           </Box>
-          {filterAllergens?.map((filterAllergen) => (
-            <FilterItem
-              key={filterAllergen.id}
-              id={filterAllergen.id}
-              name={filterAllergen.displayName}
-              onRemove={handleRemoveFilterAllergen}
-            />
-          ))}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+            }}
+          >
+            {filterAllergens?.map((filterAllergen) => (
+              <FilterItem
+                key={filterAllergen.id}
+                id={filterAllergen.id}
+                name={filterAllergen.displayName}
+                onRemove={handleRemoveFilterAllergen}
+              />
+            ))}
+          </Box>
         </Box>
       </div>
     </div>

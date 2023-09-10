@@ -65,7 +65,7 @@ export default function FilterIngredients(props: FilterIngredientsProps) {
         className="accordion-content"
         style={{
           overflow: 'hidden',
-          maxHeight: expandedAccordion ? '200px' : '0',
+          maxHeight: expandedAccordion ? undefined : '0',
           transition: 'max-height 0.3s ease-in-out, visibility 0.5s ease-in-out',
           visibility: expandedAccordion ? 'visible' : 'hidden',
         }}
@@ -105,14 +105,22 @@ export default function FilterIngredients(props: FilterIngredientsProps) {
               Add
             </Button>
           </Box>
-          {filterIngredients?.map((filterIngredient) => (
-            <FilterItem
-              key={filterIngredient.id}
-              id={filterIngredient.id}
-              name={filterIngredient.displayName}
-              onRemove={handleRemoveFilterIngredient}
-            />
-          ))}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+            }}
+          >
+            {filterIngredients?.map((filterIngredient) => (
+              <FilterItem
+                key={filterIngredient.id}
+                id={filterIngredient.id}
+                name={filterIngredient.displayName}
+                onRemove={handleRemoveFilterIngredient}
+              />
+            ))}
+          </Box>
         </Box>
       </div>
     </div>
