@@ -133,7 +133,7 @@ export default function BuildRecipe() {
               minWidth: "120px",
             }}
           >
-            Create Recipe
+            Next
           </Button>
         </div>
       </Container>

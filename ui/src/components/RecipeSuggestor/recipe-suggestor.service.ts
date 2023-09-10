@@ -13,4 +13,17 @@ export class RecipeSuggestorService {
 
     return recipeNames;
   }
+
+  public static async getFilteredRecipeNames(internalRequest: InternalRequest): Promise<string[]> {
+    const response = await internalRequest({
+      method: 'GET',
+      url: '/me/recipes/filtered-recipe-names',
+    });
+
+    const responseBody = await response.json();
+
+    const recipeNames = responseBody.recipeNames;
+
+    return recipeNames;
+  }
 }

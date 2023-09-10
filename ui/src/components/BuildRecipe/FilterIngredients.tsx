@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FilterIngredient } from './build-recipe.service';
 import { Button } from '@mui/material';
 import { Box } from '@mui/system';
