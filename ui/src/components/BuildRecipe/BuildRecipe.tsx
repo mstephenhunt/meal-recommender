@@ -7,9 +7,12 @@ import { Container } from '@mui/material';
 import FilterIngredients from './FilterIngredients';
 import FilterDiets from './FilterDiets';
 import FilterAllergens from './FilterAllergens';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 export default function BuildRecipe() {
   const internalRequest = useInternalRequest();
+  const navigate = useNavigate();
   
   const [isLoadingFilterIngredients, setIsLoadingFilterIngredients] = useState<boolean>(false);
   const [filterIngredients, setFilterIngredients] = useState<FilterIngredient[] | null>(null);
@@ -91,6 +94,7 @@ export default function BuildRecipe() {
         sx={{
           display: "flex",
           flexDirection: "column",
+          height: "50vh",
         }}
       >
         <FilterIngredients
@@ -107,6 +111,31 @@ export default function BuildRecipe() {
           filterAllergens={filterAllergens}
           setFilterAllergens={setFilterAllergens}
         />
+        <div style={{ flexGrow: 1 }} />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button
+            variant="outlined"
+            sx={{
+              minWidth: "120px",
+            }}
+          >
+            Back
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              minWidth: "120px",
+            }}
+          >
+            Create Recipe
+          </Button>
+        </div>
       </Container>
     </div>
   );

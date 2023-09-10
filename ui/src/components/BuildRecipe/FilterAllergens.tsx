@@ -65,7 +65,7 @@ export default function FilterAllergens(props: FilterAllergensProps) {
         className="accordion-content"
         style={{
           overflow: 'hidden',
-          maxHeight: expandedAccordion ? undefined : '0',
+          maxHeight: expandedAccordion ? '100%' : '0',
           transition: 'max-height 0.3s ease-in-out, visibility 0.5s ease-in-out',
           visibility: expandedAccordion ? 'visible' : 'hidden',
         }}
