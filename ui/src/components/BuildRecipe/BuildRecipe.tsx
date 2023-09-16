@@ -83,6 +83,14 @@ export default function BuildRecipe() {
     }
   }, [filterAllergens, internalRequest]);
 
+  function handleBack() {
+    navigate('/home');
+  }
+
+  function handleNext() {
+    navigate('/recipe-name-suggestor');
+  }
+
   return (
     <div>
       <MenuBar />
@@ -121,6 +129,7 @@ export default function BuildRecipe() {
         >
           <Button
             variant="outlined"
+            onClick={handleBack}
             sx={{
               minWidth: "120px",
             }}
@@ -129,6 +138,7 @@ export default function BuildRecipe() {
           </Button>
           <Button
             variant="contained"
+            onClick={handleNext}
             sx={{
               minWidth: "120px",
             }}

@@ -11,6 +11,8 @@ export class FilteredRecipeNameSuggestorService {
       url: `/me/filtered-recipe/names`,
     });
 
-    return response.json();
+    const body = await response.json();
+
+    return body.recipeNames;
   }
 }

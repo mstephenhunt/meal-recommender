@@ -33,6 +33,9 @@ export default function FilteredRecipeNameSuggestor() {
     async function getRecipeNames() {
       try {
         const recipeNames = await FilteredRecipeNameSuggestorService.getFilteredRecipeNames({ internalRequest });
+
+        console.log(recipeNames)
+
         setRecipeNames(recipeNames);
       } catch (error) {
         console.error(error);
@@ -68,7 +71,7 @@ export default function FilteredRecipeNameSuggestor() {
             {recipeNames.map((recipeName, index) => (
               <Button
                 key={index}
-                variant="outlined"
+                variant="contained"
                 color="primary"
                 style={{ 
                   textTransform: 'none', 
@@ -98,16 +101,16 @@ export default function FilteredRecipeNameSuggestor() {
             onClick={handleBack}
             variant="outlined"
             sx={{
-              minWidth: "120px",
+              minWidth: "40%",
             }}
           >
             Back
           </Button>
           <Button
           onClick={handleNewRecipesClick}
-            variant="contained"
+            variant="outlined"
             sx={{
-              minWidth: "120px",
+              minWidth: "40%",
             }}
           >
             Make New Recipes
