@@ -17,7 +17,7 @@ export default function FilteredRecipeNameSuggestor() {
   const [isLoading, setIsLoading] = useState(true);
   
   const handleBack = () => {
-    navigate('/home');
+    navigate('/build-recipe');
   };
 
   const handleRecipeClick = (recipeName: string) => {

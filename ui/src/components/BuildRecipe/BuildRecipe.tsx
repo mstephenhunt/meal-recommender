@@ -125,6 +125,7 @@ export default function BuildRecipe() {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
+            paddingTop: "15px",
           }}
         >
           <Button

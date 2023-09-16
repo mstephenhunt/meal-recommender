@@ -34,8 +34,8 @@ export default function FilterDiets(props: FilterDietProps) {
     }
   };
 
-  const [buttonVariant, setButtonVariant] = useState<'outlined' | 'contained'>('outlined');
-  const [expandedAccordion, setExpandedAccordion] = useState<boolean>(false);
+  const [buttonVariant, setButtonVariant] = useState<'outlined' | 'contained'>('contained');
+  const [expandedAccordion, setExpandedAccordion] = useState<boolean>(true);
 
   const toggleButtonVariant = () => {
     setButtonVariant(buttonVariant === 'outlined' ? 'contained' : 'outlined');

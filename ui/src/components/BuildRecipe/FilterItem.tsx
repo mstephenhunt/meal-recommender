@@ -36,7 +36,6 @@ export default function FilterItem(props: FilterItemProps) {
       </Box>
       <Button
         variant="contained"
-        color="primary"
         sx={{
           fontWeight: "bold",
           textTransform: "none",
@@ -44,6 +43,7 @@ export default function FilterItem(props: FilterItemProps) {
           minWidth: "20px",
           minHeight: "20px",
           height: "30px",
+          backgroundColor: "#737373",
         }}
         onClick={() => onRemove(id)}
       >
