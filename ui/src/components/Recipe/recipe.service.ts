@@ -17,6 +17,7 @@ export type Recipe = {
 }
 
 export class RecipeService {
+  // DEPRECATED
   public static async getRecipe(input: {
     internalRequest: InternalRequest,
     recipeName: string

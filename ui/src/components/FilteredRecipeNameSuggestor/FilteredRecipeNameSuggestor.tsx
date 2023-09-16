@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RecipeSuggestorService } from './recipe-suggestor.service';
+import { FilteredRecipeNameSuggestorService } from './filtered-recipe-name-suggestor.service';
 import MenuBar from '../MenuBar/MenuBar';
 import BotBase from '../BotBase/BotBase';
 import Container from "@mui/material/Container";
@@ -8,7 +8,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from 'react-router-dom';
 import { useInternalRequest } from '../../services/internal-request';
 
-export default function RecipeNameSuggestor() {
+export default function FilteredRecipeNameSuggestor() {
   const navigate = useNavigate();
   const internalRequest = useInternalRequest();
 
@@ -32,7 +32,7 @@ export default function RecipeNameSuggestor() {
   useEffect(() => {
     async function getRecipeNames() {
       try {
-        const recipeNames = await RecipeSuggestorService.getFilteredRecipeNames(internalRequest);
+        const recipeNames = await FilteredRecipeNameSuggestorService.getFilteredRecipeNames({ internalRequest });
         setRecipeNames(recipeNames);
       } catch (error) {
         console.error(error);
