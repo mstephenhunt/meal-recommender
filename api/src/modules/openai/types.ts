@@ -23,3 +23,9 @@ export type OpenAIIngredient = {
 export type RequestRecipeNamesInput = {
   dietaryRestrictions?: string[];
 };
+
+export type RequestFilteredRecipeNamesInput = {
+  ingredients?: string[];
+  allergens?: string[];
+  diets?: string[];
+};

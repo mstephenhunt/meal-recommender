@@ -7,9 +7,12 @@ import { Container } from '@mui/material';
 import FilterIngredients from './FilterIngredients';
 import FilterDiets from './FilterDiets';
 import FilterAllergens from './FilterAllergens';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 export default function BuildRecipe() {
   const internalRequest = useInternalRequest();
+  const navigate = useNavigate();
   
   const [isLoadingFilterIngredients, setIsLoadingFilterIngredients] = useState<boolean>(false);
   const [filterIngredients, setFilterIngredients] = useState<FilterIngredient[] | null>(null);
@@ -80,6 +83,14 @@ export default function BuildRecipe() {
     }
   }, [filterAllergens, internalRequest]);
 
+  function handleBack() {
+    navigate('/home');
+  }
+
+  function handleNext() {
+    navigate('/recipe-name-suggestor');
+  }
+
   return (
     <div>
       <MenuBar />
@@ -91,6 +102,7 @@ export default function BuildRecipe() {
         sx={{
           display: "flex",
           flexDirection: "column",
+          height: "50vh",
         }}
       >
         <FilterIngredients
@@ -107,6 +119,34 @@ export default function BuildRecipe() {
           filterAllergens={filterAllergens}
           setFilterAllergens={setFilterAllergens}
         />
+        <div style={{ flexGrow: 1 }} />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingTop: "15px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            onClick={handleBack}
+            sx={{
+              minWidth: "120px",
+            }}
+          >
+            Back
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleNext}
+            sx={{
+              minWidth: "120px",
+            }}
+          >
+            Next
+          </Button>
+        </div>
       </Container>
     </div>
   );

@@ -19,6 +19,7 @@ export class UserRecipeService {
   /**
    * Gets recipe names based on the current user's dietary restrictions.
    */
+  // DEPRECATED
   public async getRecipeNames(): Promise<string[]> {
     this.logger.log('Requesting recipe names');
 

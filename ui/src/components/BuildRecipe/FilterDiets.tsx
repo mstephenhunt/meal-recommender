@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FilterDiet } from './build-recipe.service';
 import { Button } from '@mui/material';
 import { Box } from '@mui/system';
@@ -34,8 +34,8 @@ export default function FilterDiets(props: FilterDietProps) {
     }
   };
 
-  const [buttonVariant, setButtonVariant] = useState<'outlined' | 'contained'>('outlined');
-  const [expandedAccordion, setExpandedAccordion] = useState<boolean>(false);
+  const [buttonVariant, setButtonVariant] = useState<'outlined' | 'contained'>('contained');
+  const [expandedAccordion, setExpandedAccordion] = useState<boolean>(true);
 
   const toggleButtonVariant = () => {
     setButtonVariant(buttonVariant === 'outlined' ? 'contained' : 'outlined');
@@ -65,7 +65,7 @@ export default function FilterDiets(props: FilterDietProps) {
         className="accordion-content"
         style={{
           overflow: 'hidden',
-          maxHeight: expandedAccordion ? undefined : '0',
+          maxHeight: expandedAccordion ? '100%' : '0',
           transition: 'max-height 0.3s ease-in-out, visibility 0.5s ease-in-out',
           visibility: expandedAccordion ? 'visible' : 'hidden',
         }}

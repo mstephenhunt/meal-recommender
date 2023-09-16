@@ -10,14 +10,24 @@ export type Recipe = {
     unit: string;
   }[];
   instructions: string;
-  dietaryRestrictions: {
+  dietFilters: {
     id: number;
     name: string;
+    displayName: string;
   }[];
+  allergenFilters: {
+    id: number;
+    name: string;
+    displayName: string;
+  }[];
+  ingredientFilters: {
+    id: number;
+    name: string;
+    displayName: string;
+  }
 }
 
-export class RecipeService {
-  // DEPRECATED
+export class FilteredRecipeService {
   public static async getRecipe(input: {
     internalRequest: InternalRequest,
     recipeName: string
@@ -26,7 +36,7 @@ export class RecipeService {
 
     const response = await internalRequest({
       method: 'GET',
-      url: `/me/recipes/generate-recipe?recipeName=${recipeName}`,
+      url: `/me/filtered-recipe?recipeName=${recipeName}`,
     });
 
     return response.json();

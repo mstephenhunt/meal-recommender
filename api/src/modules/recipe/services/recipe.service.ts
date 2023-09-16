@@ -19,6 +19,23 @@ export class RecipeService {
     private readonly saveRecipeService: SaveRecipeService,
   ) {}
 
+  public async getFilteredRecipeNames(input: {
+    ingredients?: Ingredient[];
+    allergens?: Allergen[];
+    diets?: Diet[];
+  }): Promise<string[]> {
+    const { ingredients, allergens, diets } = input;
+
+    const recipeNames = await this.openaiService.requestFilteredRecipeNames({
+      ingredients: ingredients.map((i) => i.name),
+      allergens: allergens.map((a) => a.name),
+      diets: diets.map((d) => d.name),
+    });
+
+    return recipeNames;
+  }
+
+  // DEPRECATED
   public async requestRecipeNames(input: {
     dietaryRestrictions: DietaryRestriction[];
   }): Promise<string[]> {

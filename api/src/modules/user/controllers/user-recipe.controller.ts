@@ -12,6 +12,7 @@ export class UserRecipesController {
     private readonly userRecipeService: UserRecipeService,
   ) {}
 
+  // DEPRECATED
   @Get('/request-recipe-names')
   public async getRecipeNames(): Promise<{ recipeNames: string[] }> {
     this.logger.log('Requesting recipe names');
@@ -21,6 +22,7 @@ export class UserRecipesController {
     };
   }
 
+  // DEPRECATED
   @Get('/generate-recipe')
   public async generateRecipe(
     @Query('recipeName') recipeName: string,
