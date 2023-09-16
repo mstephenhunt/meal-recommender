@@ -10,6 +10,20 @@ export class GetFilteredRecipeService {
     private readonly userRecipeFiltersService: UserRecipeFiltersService,
   ) {}
 
+  public async getFilteredRecipeNames(): Promise<string[]> {
+    const filterIngredients =
+      await this.userRecipeFiltersService.getUserIngredients();
+    const filterAllergens =
+      await this.userRecipeFiltersService.getUserAllergens();
+    const filterDiets = await this.userRecipeFiltersService.getUserDiets();
+
+    return this.recipeService.getFilteredRecipeNames({
+      ingredients: filterIngredients,
+      allergens: filterAllergens,
+      diets: filterDiets,
+    });
+  }
+
   public async getFilteredRecipe(input: {
     recipeName: string;
   }): Promise<Recipe> {

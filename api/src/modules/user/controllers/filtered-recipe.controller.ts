@@ -10,6 +10,11 @@ export class FilteredRecipeController {
     private readonly getFilteredRecipeService: GetFilteredRecipeService,
   ) {}
 
+  @Get('names')
+  public async getFilteredRecipeNames(): Promise<string[]> {
+    return this.getFilteredRecipeService.getFilteredRecipeNames();
+  }
+
   @Get()
   public async getFilteredRecipe(
     @Query('recipeName') recipeName: string,
