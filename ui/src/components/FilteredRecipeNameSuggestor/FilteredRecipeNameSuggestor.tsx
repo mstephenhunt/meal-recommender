@@ -21,7 +21,7 @@ export default function FilteredRecipeNameSuggestor() {
   };
 
   const handleRecipeClick = (recipeName: string) => {
-    navigate(`/recipe?recipeName=${encodeURIComponent(recipeName)}`);
+    navigate(`/filtered-recipe?recipeName=${encodeURIComponent(recipeName)}`);
   };
 
   const handleNewRecipesClick = () => {
@@ -33,8 +33,6 @@ export default function FilteredRecipeNameSuggestor() {
     async function getRecipeNames() {
       try {
         const recipeNames = await FilteredRecipeNameSuggestorService.getFilteredRecipeNames({ internalRequest });
-
-        console.log(recipeNames)
 
         setRecipeNames(recipeNames);
       } catch (error) {
