@@ -5,7 +5,6 @@ import { RecipeService } from '../../recipe/services/recipe.service';
 import { DietaryRestrictionService } from '../../dietary-restriction/services/dietary-restriction.service';
 import { Recipe } from '../../recipe/types';
 import { PrismaService } from '../..//db/services/prisma.service';
-import { UserRecipeFiltersService } from './user-recipe-filters.service';
 
 @Injectable()
 export class UserRecipeService {
@@ -15,24 +14,7 @@ export class UserRecipeService {
     private readonly recipeService: RecipeService,
     private readonly dietaryRestrictionService: DietaryRestrictionService,
     private readonly prismaService: PrismaService,
-    private readonly userRecipeFiltersService: UserRecipeFiltersService,
   ) {}
-
-  public async getFilteredRecipeNames(): Promise<string[]> {
-    this.logger.log('Requesting recipe names');
-
-    const filterIngredients =
-      await this.userRecipeFiltersService.getUserIngredients();
-    const filterAllergens =
-      await this.userRecipeFiltersService.getUserAllergens();
-    const filterDiets = await this.userRecipeFiltersService.getUserDiets();
-
-    return this.recipeService.getFilteredRecipeNames({
-      ingredients: filterIngredients,
-      allergens: filterAllergens,
-      diets: filterDiets,
-    });
-  }
 
   /**
    * Gets recipe names based on the current user's dietary restrictions.
