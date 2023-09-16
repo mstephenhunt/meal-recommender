@@ -8,13 +8,9 @@ import { useNavigate } from 'react-router-dom';
 export default function MainMenuPage() {
   const navigate = useNavigate();
 
-  const handleAddDietaryRestrictions = () => {
-    navigate('/dietary-restrictions');
-  };
-
-  const handleSuggestRecipes = () => {
-    navigate('/recipe-suggestor');
-  };
+  const handleMakeNewRecipe = () => {
+    navigate('/build-recipe');
+  }
 
   return (
     <div>
@@ -28,49 +24,25 @@ export default function MainMenuPage() {
         }}
       >
         <BotBase
-          speechText="Welcome! Anything you'd like me to know?"
+          speechText="Welcome!"
         />
         <Button
           variant="contained"
           sx={{
-            height: "70px",
-            width: "100%",
             marginTop: "20px",
-            backgroundColor: "#53b94f",
-            fontWeight: "bold",
-            textTransform: "none",
           }}
-          onClick={handleSuggestRecipes}
+          onClick={handleMakeNewRecipe}
         >
-          Suggest Recipes
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            height: "70px",
-            width: "100%",
-            marginTop: "20px",
-            backgroundColor: "#53b94f",
-            fontWeight: "bold",
-            textTransform: "none",
-          }}
-          onClick={handleAddDietaryRestrictions}
-        >
-          Add Dietary Restrictions
+          Make New Recipe
         </Button>
         <Button
           variant="contained"
           disabled
           sx={{
-            height: "70px",
-            width: "100%",
             marginTop: "20px",
-            backgroundColor: "#53b94f",
-            fontWeight: "bold",
-            textTransform: "none",
           }}
         >
-          Add Previous Meals
+          See Previous Recipes
         </Button>
       </Container>
     </div>
