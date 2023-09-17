@@ -95,28 +95,6 @@ model RecipeDiet {
   @@map("recipe_diets")
 }
 
-// DEPRECATED
-model RecipeDietaryRestriction {
-  id              Int             @id @default(autoincrement())
-  createdAt       DateTime        @default(now())                  @map("created_at")
-  updatedAt       DateTime        @updatedAt                       @map("updated_at")
-  recipeId        Int                                              @map("recipe_id") 
-  dietaryRestrictionId  Int                                        @map("dietary_restriction_id")
-
-  @@map("recipe_dietary_restrictions")
-}
-
-// DEPRECATED
-model DietaryRestriction {
-  id              Int             @id @default(autoincrement())
-  createdAt       DateTime        @default(now())                  @map("created_at")
-  updatedAt       DateTime        @updatedAt                       @map("updated_at")
-  name            String          @unique
-  displayName     String          @map("display_name")
-
-  @@map("dietary_restrictions")
-}
-
 // ----------------------------------------------------------------- //
 // These models are used to cache requests made to external systems
 // ----------------------------------------------------------------- //
@@ -156,16 +134,6 @@ model RequestResponseCache {
 // ----------------------------------------------------------------- //
 // Used to track dietary restrictions related to user preferences
 // ----------------------------------------------------------------- //
-// DEPRECATED
-model UsersDietaryResctrictions {
-  id                    Int             @id @default(autoincrement())
-  createdAt             DateTime        @default(now())                  @map("created_at")
-  updatedAt             DateTime        @updatedAt                       @map("updated_at")
-  userId                Int                                              @map("user_id")
-  dietaryRestrictionId  Int                                              @map("dietary_restriction_id")
-
-  @@map("users_dietary_restrictions")
-}
 
 model UsersIngredients {
   id                    Int             @id @default(autoincrement())
