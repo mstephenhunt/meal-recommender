@@ -3,7 +3,7 @@ import { GetRecipeService } from '../services/get-recipe.service';
 import { UserGuard } from '../../auth/guards/user.guard';
 import { RecipeEntity } from '../entities/recipe.entity';
 
-@Controller('recipes')
+@Controller('api/recipes')
 @UseGuards(UserGuard)
 export class RecipeController {
   constructor(private readonly getRecipeService: GetRecipeService) {}

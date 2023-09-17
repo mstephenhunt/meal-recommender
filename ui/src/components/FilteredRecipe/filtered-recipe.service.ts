@@ -41,4 +41,18 @@ export class FilteredRecipeService {
 
     return response.json();
   }
+
+  public static async getRecipeById(input: {
+    internalRequest: InternalRequest,
+    recipeId: number;
+  }): Promise<Recipe> {
+    const { internalRequest, recipeId } = input;
+
+    const response = await internalRequest({
+      method: 'GET',
+      url: `/recipes/${recipeId}`,
+    });
+
+    return response.json();
+  }
 }
