@@ -1,6 +1,5 @@
 import { Recipe } from '../types';
 import { IngredientEntity } from './ingredient.entity';
-import { DietaryRestrictionEntity } from '../../dietary-restriction/entities/dietary-restriction.entity';
 import { AllergenFilterEntity } from './allergen-filter.entity';
 import { IngredientFilterEntity } from './ingredient-filter.entity';
 import { DietFilterEntity } from './diet-filter.entity';
@@ -10,7 +9,6 @@ export class RecipeEntity {
   public readonly name: string;
   public readonly instructions: string;
   public readonly ingredients: IngredientEntity[];
-  public readonly dietaryRestrictions?: DietaryRestrictionEntity[];
   public readonly allergenFilters?: AllergenFilterEntity[];
   public readonly ingredientFilters?: IngredientFilterEntity[];
   public readonly dietFilters?: DietFilterEntity[];
@@ -31,16 +29,6 @@ export class RecipeEntity {
           recipeIngredient.unit,
         ),
     );
-
-    if (recipe.dietaryRestrictions) {
-      this.dietaryRestrictions = recipe.dietaryRestrictions.map(
-        (dietaryRestriction) =>
-          new DietaryRestrictionEntity({
-            id: dietaryRestriction.id,
-            name: dietaryRestriction.name,
-          }),
-      );
-    }
 
     if (recipe.filterAllergens) {
       this.allergenFilters = recipe.filterAllergens.map(

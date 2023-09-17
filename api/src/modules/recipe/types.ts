@@ -1,5 +1,3 @@
-import { DietaryRestriction } from '../dietary-restriction/services/dietary-restriction.service';
-
 export type Allergen = {
   id: number;
   name: string;
@@ -48,7 +46,6 @@ export type Recipe = {
   name: string;
   instructions: string;
   recipeIngredients: RecipeIngredient[];
-  dietaryRestrictions?: DietaryRestriction[];
   filterIngredients?: Ingredient[];
   filterAllergens?: Allergen[];
   filterDiets?: Diet[];
@@ -58,7 +55,6 @@ export type RecipeInput = {
   name: string;
   instructions: string;
   recipeIngredients: RecipeIngredientInput[];
-  dietaryRestrictions?: DietaryRestriction[];
   filterIngredients?: Ingredient[];
   filterAllergens?: Allergen[];
   filterDiets?: Diet[];
