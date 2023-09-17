@@ -11,6 +11,8 @@ import { UserRecipeFiltersController } from './controllers/user-recipe-filter.co
 import { UserRecipeFiltersService } from './services/user-recipe-filters.service';
 import { FilteredRecipeController } from './controllers/filtered-recipe.controller';
 import { GetFilteredRecipeService } from './services/get-filtered-recipe.service';
+import { UserRecipesController } from './controllers/user-recipes.controller';
+import { GetMyRecipesService } from './services/get-my-recipes.service';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { GetFilteredRecipeService } from './services/get-filtered-recipe.service
     UserController,
     UserRecipeFiltersController,
     FilteredRecipeController,
+    UserRecipesController,
   ],
   providers: [
     UserService,
@@ -31,6 +34,7 @@ import { GetFilteredRecipeService } from './services/get-filtered-recipe.service
     UserContextService,
     UserRecipeFiltersService,
     GetFilteredRecipeService,
+    GetMyRecipesService,
   ],
 })
 export class UserModule {}

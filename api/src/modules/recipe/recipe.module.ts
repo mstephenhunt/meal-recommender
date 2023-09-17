@@ -18,6 +18,6 @@ import { GetRecipeService } from './services/get-recipe.service';
     GetRecipeService,
   ],
   controllers: [RecipeController],
-  exports: [RecipeService, RecipeFilterService],
+  exports: [RecipeService, RecipeFilterService, GetRecipeService],
 })
 export class RecipeModule {}
