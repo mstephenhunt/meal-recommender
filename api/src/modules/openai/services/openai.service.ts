@@ -7,7 +7,6 @@ import {
   OpenAIMessage,
   OpenAIMeal,
   OpenAIRole,
-  RequestRecipeNamesInput,
   RequestFilteredRecipeNamesInput,
 } from '../types';
 import { Logger } from 'nestjs-pino';
@@ -36,39 +35,6 @@ export class OpenaiService {
     private readonly logger: Logger,
   ) {
     this.apiKey = this.configService.get<string>('OPENAI_API_KEY');
-  }
-
-  // DEPRECATED
-  public async requestRecipeNames(
-    input: RequestRecipeNamesInput,
-  ): Promise<string[]> {
-    const initializeMessage = {
-      role: OpenAIRole.SYSTEM,
-      content: `Please provide a list of five recipe names that fit within the following dietary restrictions: ${input.dietaryRestrictions.join(
-        ', ',
-      )}. Have your message return in the JSON format: 
-      {
-        "recipeNames": ["recipe name 1", "recipe name 2", "recipe name 3", "recipe name 4", "recipe name 5"]
-      }`,
-    };
-
-    this.logger.log('Sending message to OpenAI', {
-      message: initializeMessage,
-    });
-
-    const response = JSON.parse(await this.sendMessage([initializeMessage]));
-
-    this.logger.log('Received response from OpenAI', {
-      response,
-    });
-
-    const recipeNames = response.recipeNames;
-
-    this.logger.log('Converted response into recipe names', {
-      recipeNames,
-    });
-
-    return recipeNames;
   }
 
   public async requestFilteredRecipeNames(
@@ -119,36 +85,6 @@ export class OpenaiService {
     });
 
     return recipeNames;
-  }
-
-  public async requestRecipe(input: {
-    recipeName: string;
-    dietaryRestrictions?: string[];
-  }): Promise<OpenAIMeal> {
-    const dietaryRestrictionsMessage = input.dietaryRestrictions
-      ? `The recipe should fit the dietary restrictions: ${input.dietaryRestrictions.join(
-          ', ',
-        )}.`
-      : undefined;
-
-    const initializeMessage = {
-      role: OpenAIRole.SYSTEM,
-      content: `Please provide a recipe for ${input.recipeName}. ${dietaryRestrictionsMessage} ${this.responseFormat}`,
-    };
-
-    this.logger.log('Sending message to OpenAI', {
-      message: initializeMessage,
-    });
-
-    const response = JSON.parse(
-      await this.sendMessage([initializeMessage]),
-    ) as unknown as OpenAIMeal;
-
-    this.logger.log('Received response from OpenAI', {
-      response,
-    });
-
-    return response;
   }
 
   public async requestRecipeWithFilters(input: {

@@ -2,10 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainMenuPage from './components/MainMenu/MainMenuPage';
 import Login from './components/Login/Login';
-import DietaryRestrictionsPage from './components/DietaryRestrictions/DietaryRestrictionsPage';
 import { AuthService } from './components/Login/auth.service';
-import RecipeSuggestor from './components/RecipeSuggestor/RecipeSuggestor';
-import Recipe from './components/Recipe/Recipe';
 import AppBase from './components/AppBase/AppBase';
 import { AuthProvider } from './components/Login/auth.context';
 import BuildRecipe from './components/BuildRecipe/BuildRecipe';
@@ -62,28 +59,6 @@ export default function App() {
         }
       />
       <Route
-        path="/dietary-restrictions"
-        element={
-          <AppBase
-            children={
-              <DietaryRestrictionsPage />
-            }
-            isLoggedIn={isLoggedIn}
-          />
-        }
-      />
-      <Route
-        path="/recipe-suggestor"
-        element={
-          <AppBase
-            children={
-              <RecipeSuggestor />
-            }
-            isLoggedIn={isLoggedIn}
-          />
-        }
-      />
-      <Route
         path="/build-recipe"
         element={
           <AppBase
@@ -111,17 +86,6 @@ export default function App() {
           <AppBase
             children={
               <FilteredRecipe />
-            }
-            isLoggedIn={isLoggedIn}
-          />
-        }
-      />
-      <Route
-        path="/recipe"
-        element={
-          <AppBase
-            children={
-              <Recipe />
             }
             isLoggedIn={isLoggedIn}
           />

@@ -41,7 +41,7 @@ export default function BuildRecipe() {
     if (filterIngredients === null && !isLoadingFilterIngredients) {
       getFilterIngredients();
     }
-  }, [filterIngredients, internalRequest]);
+  }, [filterIngredients, internalRequest, isLoadingFilterIngredients]);
 
   useEffect(() => {
     async function getFilterDiets() {
@@ -61,7 +61,7 @@ export default function BuildRecipe() {
     if (filterDiets === null && !isLoadingFilterDiets) {
       getFilterDiets();
     }
-  }, [filterDiets, internalRequest]);
+  }, [filterDiets, internalRequest, isLoadingFilterDiets]);
 
   useEffect(() => {
     async function getFilterAllergens() {
@@ -81,7 +81,7 @@ export default function BuildRecipe() {
     if (filterAllergens === null && !isLoadingFilterAllergens) {
       getFilterAllergens();
     }
-  }, [filterAllergens, internalRequest]);
+  }, [filterAllergens, internalRequest, isLoadingFilterAllergens]);
 
   function handleBack() {
     navigate('/home');
