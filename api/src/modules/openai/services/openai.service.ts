@@ -43,7 +43,7 @@ export class OpenaiService {
     const { ingredients, allergens, diets } = input;
 
     const ingredientsMessage = ingredients
-      ? `The recipe should use some or all of these ingredients: ${ingredients.join(
+      ? `The recipe should use some of these ingredients: ${ingredients.join(
           ', ',
         )}.`
       : undefined;
