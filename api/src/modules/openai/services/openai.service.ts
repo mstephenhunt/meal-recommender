@@ -43,9 +43,9 @@ export class OpenaiService {
     const { ingredients, allergens, diets } = input;
 
     const ingredientsMessage = ingredients
-      ? `The recipe should use some or all of these ingredients: ${ingredients.join(
+      ? `The recipe should use some of these ingredients: ${ingredients.join(
           ', ',
-        )}.`
+        )}. Include other ingredients as well.`
       : undefined;
 
     const allergensMessage = allergens
@@ -96,9 +96,9 @@ export class OpenaiService {
     const { recipeName, ingredients, allergens, diets } = input;
 
     const ingredientsMessage = ingredients
-      ? `The recipe should use some or all of these ingredients: ${ingredients.join(
+      ? `The recipe should use some of these ingredients: ${ingredients.join(
           ', ',
-        )}.`
+        )}. Include other ingredients as well.`
       : undefined;
     const allergensMessage = allergens
       ? `The recipe should not contain these allergens: ${allergens.join(

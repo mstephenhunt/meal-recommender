@@ -6,10 +6,18 @@ import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from '../auth/auth.module';
 import { RecipeFilterService } from './services/recipe-filter.service';
 import { SaveRecipeService } from './services/save-recipe.service';
+import { RecipeController } from './controllers/recipe.controller';
+import { GetRecipeService } from './services/get-recipe.service';
 
 @Module({
   imports: [DbModule, OpenaiModule, LoggerModule, AuthModule],
-  providers: [RecipeService, RecipeFilterService, SaveRecipeService],
-  exports: [RecipeService, RecipeFilterService],
+  providers: [
+    RecipeService,
+    RecipeFilterService,
+    SaveRecipeService,
+    GetRecipeService,
+  ],
+  controllers: [RecipeController],
+  exports: [RecipeService, RecipeFilterService, GetRecipeService],
 })
 export class RecipeModule {}

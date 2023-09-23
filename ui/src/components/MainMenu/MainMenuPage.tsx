@@ -36,8 +36,8 @@ export default function MainMenuPage() {
           Make New Recipe
         </Button>
         <Button
-          variant="contained"
-          disabled
+          variant="outlined"
+          onClick={() => navigate('/my-recipes')}
           sx={{
             marginTop: "20px",
           }}

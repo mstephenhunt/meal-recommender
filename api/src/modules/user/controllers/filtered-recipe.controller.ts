@@ -25,8 +25,6 @@ export class FilteredRecipeController {
       recipeName,
     });
 
-    console.log(`\n\n --------> ${JSON.stringify(recipe, null, 2)} \n\n`);
-
     return new RecipeEntity(recipe);
   }
 }

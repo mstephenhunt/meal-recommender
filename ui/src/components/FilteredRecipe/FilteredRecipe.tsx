@@ -20,6 +20,7 @@ export default function FilteredRecipe() {
 
   const queryParams = new URLSearchParams(location.search);
   const recipeName = queryParams.get('recipeName');
+  const recipeId = queryParams.get('recipeId');
 
   const [recipe, setRecipe] = useState<APIRecipe | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,11 +28,21 @@ export default function FilteredRecipe() {
   useEffect(() => {
     async function getRecipe() {
       try {
-        const recipeData = await FilteredRecipeService.getRecipe({
-          recipeName: recipeName!,
-          internalRequest,
-        });
-        setRecipe(recipeData);
+        if (recipeName) {
+          const recipeData = await FilteredRecipeService.getRecipe({
+            recipeName: recipeName!,
+            internalRequest,
+          });
+          setRecipe(recipeData);
+        }
+
+        if (recipeId) {
+          const recipeData = await FilteredRecipeService.getRecipeById({
+            recipeId: parseInt(recipeId),
+            internalRequest,
+          });
+          setRecipe(recipeData);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -42,7 +53,7 @@ export default function FilteredRecipe() {
     if (!recipe) {
       getRecipe();
     }
-  }, [recipeName, internalRequest, recipe]);
+  }, [recipeName, internalRequest, recipe, recipeId],);
 
   return (
     <div>
@@ -82,7 +93,7 @@ export default function FilteredRecipe() {
         <Button 
           variant="contained"
           sx={{ textTransform: "none", marginTop: '10px', marginBottom: '10px' }}
-          onClick={() => navigate('/home')}
+          onClick={() => navigate('/recipe-name-suggestor')}
         >
           Back
         </Button>
