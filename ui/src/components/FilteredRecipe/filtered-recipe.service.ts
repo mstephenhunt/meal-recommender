@@ -2,6 +2,8 @@ import { InternalRequest } from "../../services/internal-request";
 
 export type Recipe = {
   id: number;
+  createdAt: Date;
+  updatedAt: Date;
   name: string;
   ingredients: {
     id: number;
