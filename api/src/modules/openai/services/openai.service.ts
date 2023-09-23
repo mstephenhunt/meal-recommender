@@ -45,7 +45,7 @@ export class OpenaiService {
     const ingredientsMessage = ingredients
       ? `The recipe should use some of these ingredients: ${ingredients.join(
           ', ',
-        )}.`
+        )}. Include other ingredients as well.`
       : undefined;
 
     const allergensMessage = allergens
