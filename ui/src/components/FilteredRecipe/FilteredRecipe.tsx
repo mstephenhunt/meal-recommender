@@ -93,7 +93,7 @@ export default function FilteredRecipe() {
         <Button 
           variant="contained"
           sx={{ textTransform: "none", marginTop: '10px', marginBottom: '10px' }}
-          onClick={() => navigate('/home')}
+          onClick={() => navigate('/build-recipe')}
         >
           Back
         </Button>
