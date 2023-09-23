@@ -6,6 +6,8 @@ import { DietFilterEntity } from './diet-filter.entity';
 
 export class RecipeEntity {
   public readonly id: number;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
   public readonly name: string;
   public readonly instructions: string;
   public readonly ingredients: IngredientEntity[];
@@ -15,6 +17,8 @@ export class RecipeEntity {
 
   constructor(recipe: Recipe) {
     this.id = recipe.id;
+    this.createdAt = recipe.createdAt;
+    this.updatedAt = recipe.updatedAt;
     this.name = recipe.name;
     this.instructions = recipe.instructions;
     this.ingredients = recipe.recipeIngredients.map(

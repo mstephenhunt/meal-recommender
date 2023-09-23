@@ -43,6 +43,8 @@ export type RecipeIngredientInput = {
 
 export type Recipe = {
   id: number;
+  createdAt: Date;
+  updatedAt: Date;
   name: string;
   instructions: string;
   recipeIngredients: RecipeIngredient[];
