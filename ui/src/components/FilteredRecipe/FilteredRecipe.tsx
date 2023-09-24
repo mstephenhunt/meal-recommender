@@ -12,6 +12,7 @@ import RecipeTitle from "./RecipeTitle";
 import RecipeIngredients  from "./RecipeIngredients";
 import RecipeInstructions from "./RecipeInstructions";
 import { useInternalRequest } from "../../services/internal-request";
+import ActionBar from "./ActionBar";
 
 export default function FilteredRecipe() {
   const location = useLocation();
@@ -77,6 +78,9 @@ export default function FilteredRecipe() {
               flexDirection="column"
               alignItems="center"
             >
+              <ActionBar
+                recipeId={recipe.id}
+              />
               <RecipeTitle
                 title={recipe.name}
                 dietaryRestrictions={[]}
