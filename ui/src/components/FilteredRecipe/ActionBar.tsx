@@ -27,7 +27,9 @@ export default function ActionBar({ recipeId }: ActionBarProps) {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: "center", width: "100%", marginBottom: "10px", marginTop: "10px" }}>
+    <Box sx={{ 
+      display: 'flex', 
+      justifyContent: "space-between", width: "100%", marginBottom: "10px", marginTop: "10px" }}>
       <Button
         sx={{
           minWidth: "40%",
