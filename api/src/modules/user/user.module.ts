@@ -13,6 +13,8 @@ import { FilteredRecipeController } from './controllers/filtered-recipe.controll
 import { GetFilteredRecipeService } from './services/get-filtered-recipe.service';
 import { UserRecipesController } from './controllers/user-recipes.controller';
 import { GetMyRecipesService } from './services/get-my-recipes.service';
+import { FavoritesController } from './controllers/favorites.controller';
+import { FavoritesService } from './services/favorites.service';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { GetMyRecipesService } from './services/get-my-recipes.service';
     UserRecipeFiltersController,
     FilteredRecipeController,
     UserRecipesController,
+    FavoritesController,
   ],
   providers: [
     UserService,
@@ -35,6 +38,7 @@ import { GetMyRecipesService } from './services/get-my-recipes.service';
     UserRecipeFiltersService,
     GetFilteredRecipeService,
     GetMyRecipesService,
+    FavoritesService,
   ],
 })
 export class UserModule {}

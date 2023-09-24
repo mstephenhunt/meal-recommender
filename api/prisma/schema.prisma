@@ -168,6 +168,17 @@ model UsersDiets {
   @@unique([userId, dietId])
 }
 
+model UsersFavorites {
+  id                    Int             @id @default(autoincrement())
+  createdAt             DateTime        @default(now())                  @map("created_at")
+  updatedAt             DateTime        @updatedAt                       @map("updated_at")
+  userId                Int                                              @map("user_id")
+  recipeId              Int                                              @map("recipe_id")
+
+  @@map("user_favorites")
+  @@unique([userId, recipeId])
+}
+
 // ----------------------------------------------------------------- //
 // Associates users to recipes. Used for history and favorites.
 // ----------------------------------------------------------------- //
