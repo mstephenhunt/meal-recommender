@@ -18,7 +18,9 @@ export default function MenuBar() {
     <AppBar position="static">
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <a href="/home" onClick={handleLogoClick}>
-          <img src={hat} height={"45px"} alt="home" />
+          <img src={hat} height={"40px"} alt="home" 
+            style={{ marginTop: "5px", }}
+          />
         </a>
         <Button
           sx={{
